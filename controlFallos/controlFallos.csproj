@@ -1,0 +1,685 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE65C335-8C56-4210-8F4E-3D6AC0B16C55}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>controlFallos</RootNamespace>
+    <AssemblyName>controlFallos</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>F:\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>C26E966B71A627BF15B224651735B121F368E220</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>controlFallos_ClaveTemporal.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>F:\Supervicion\Supervicion\bin\Debug\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Outlook, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="SplashScreen, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SplashScreen.Winforms.1.0.0\lib\SplashScreen.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="bloqueoLogin.cs" />
+    <Compile Include="catAnaqueles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catAnaqueles.Designer.cs">
+      <DependentUpon>catAnaqueles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catClasificaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catClasificaciones.Designer.cs">
+      <DependentUpon>catClasificaciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catDescFallos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catDescFallos.Designer.cs">
+      <DependentUpon>catDescFallos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catEmpresas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catEmpresas.Designer.cs">
+      <DependentUpon>catEmpresas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catfallosGrales.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catfallosGrales.Designer.cs">
+      <DependentUpon>catfallosGrales.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catPasillos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catPasillos.Designer.cs">
+      <DependentUpon>catPasillos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catPersonal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catPersonal.Designer.cs">
+      <DependentUpon>catPersonal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catProveedores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catProveedores.Designer.cs">
+      <DependentUpon>catProveedores.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catPuestos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catPuestos.Designer.cs">
+      <DependentUpon>catPuestos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catRefacciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catRefacciones.Designer.cs">
+      <DependentUpon>catRefacciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catServicios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catServicios.Designer.cs">
+      <DependentUpon>catServicios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catUnidades.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catUnidades.Designer.cs">
+      <DependentUpon>catUnidades.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catUnidaesTRI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catUnidaesTRI.Designer.cs">
+      <DependentUpon>catUnidaesTRI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="conexion.cs" />
+    <Compile Include="familias.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="familias.Designer.cs">
+      <DependentUpon>familias.cs</DependentUpon>
+    </Compile>
+    <Compile Include="nuevoReporteMantenimiento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="nuevoReporteMantenimiento.Designer.cs">
+      <DependentUpon>nuevoReporteMantenimiento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="nuevoReporteSupervision.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="nuevoReporteSupervision.designer.cs">
+      <DependentUpon>nuevoReporteSupervision.cs</DependentUpon>
+    </Compile>
+    <Compile Include="marcas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="marcas.Designer.cs">
+      <DependentUpon>marcas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="nuevaRefaccion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="nuevaRefaccion.Designer.cs">
+      <DependentUpon>nuevaRefaccion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="login.Designer.cs">
+      <DependentUpon>login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="menuPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="menuPrincipal.Designer.cs">
+      <DependentUpon>menuPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificacionTri.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NotificacionTri.Designer.cs">
+      <DependentUpon>NotificacionTri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Privilegios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Privilegios.Designer.cs">
+      <DependentUpon>Privilegios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="recibirCredencial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="recibirCredencial.Designer.cs">
+      <DependentUpon>recibirCredencial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TRI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TRI.designer.cs">
+      <DependentUpon>TRI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ubicaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ubicaciones.Designer.cs">
+      <DependentUpon>ubicaciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ums.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ums.Designer.cs">
+      <DependentUpon>ums.cs</DependentUpon>
+    </Compile>
+    <Compile Include="validaciones.cs" />
+    <EmbeddedResource Include="catAnaqueles.resx">
+      <DependentUpon>catAnaqueles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catClasificaciones.resx">
+      <DependentUpon>catClasificaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catDescFallos.resx">
+      <DependentUpon>catDescFallos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catEmpresas.resx">
+      <DependentUpon>catEmpresas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catfallosGrales.resx">
+      <DependentUpon>catfallosGrales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catPasillos.resx">
+      <DependentUpon>catPasillos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catPersonal.resx">
+      <DependentUpon>catPersonal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catProveedores.resx">
+      <DependentUpon>catProveedores.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catPuestos.resx">
+      <DependentUpon>catPuestos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catRefacciones.resx">
+      <DependentUpon>catRefacciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catServicios.resx">
+      <DependentUpon>catServicios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catUnidades.resx">
+      <DependentUpon>catUnidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catUnidaesTRI.resx">
+      <DependentUpon>catUnidaesTRI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="familias.resx">
+      <DependentUpon>familias.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nuevoReporteMantenimiento.resx">
+      <DependentUpon>nuevoReporteMantenimiento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nuevoReporteSupervision.resx">
+      <DependentUpon>nuevoReporteSupervision.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="marcas.resx">
+      <DependentUpon>marcas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="nuevaRefaccion.resx">
+      <DependentUpon>nuevaRefaccion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="login.resx">
+      <DependentUpon>login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="menuPrincipal.resx">
+      <DependentUpon>menuPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotificacionTri.resx">
+      <DependentUpon>NotificacionTri.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Privilegios.resx">
+      <DependentUpon>Privilegios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="recibirCredencial.resx">
+      <DependentUpon>recibirCredencial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TRI.resx">
+      <DependentUpon>TRI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ubicaciones.resx">
+      <DependentUpon>ubicaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ums.resx">
+      <DependentUpon>ums.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="controlFallos_ClaveTemporal.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dbkel_CXkAE43aG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete-logo-png-6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\anadir-nuevo-documento.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boton-guardar-archivo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buscar-en-carpeta %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\computer %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pdf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\signo-de-verificacion-en-un-circulo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bell %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rec.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\left-arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eye.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eye %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enviar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user-login-button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user-login-button %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow-down-sign-to-navigate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\navigate-up-arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notification.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notification %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu-button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder %285%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\medical-history.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\medical-history %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\medical-history %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\guardar %286%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\carpeta.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1491313940-repeat_82991.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\xmag_search_find_export_locate_5984.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\guardar %286%291.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sobresalir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\support.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\idea.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\medical-report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\racing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\catalog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\catalog %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\newspaper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notification %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\support %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\enterprise.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\home-icon-silhouette.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bug %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\presentation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delivery-truck.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\manager.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\construction.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\car-parts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\unfriend.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\visibility-button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\businessman.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete %284%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\password.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 y x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eye %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\customer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\businessman %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pushpin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bus %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\virus.png" />
+    <None Include="Resources\up.png" />
+    <None Include="Resources\uncheck.png" />
+    <None Include="Resources\no-waiting.png" />
+    <None Include="Resources\check.png" />
+    <None Include="Resources\foursquare-button.png" />
+    <None Include="Resources\eraser.png" />
+    <None Include="Resources\ajustes.png" />
+    <Content Include="Resources\back.png" />
+    <None Include="Resources\back1.png" />
+    <None Include="Resources\box.png" />
+    <None Include="Resources\maps-and-flags.png" />
+    <None Include="Resources\measuring-tape.png" />
+    <None Include="Resources\mirror.png" />
+    <None Include="Resources\robber-silhouette-trying-to-steal-car-part.png" />
+    <None Include="Resources\robber-silhouette-trying-to-steal-car-part %281%29.png" />
+    <None Include="Resources\Logo TRI_curvas.jpg" />
+    <None Include="Resources\Imagen2.png" />
+    <None Include="Resources\car-machine.png" />
+    <None Include="Resources\original.png" />
+    <None Include="Resources\shopping-cart.png" />
+    <None Include="Resources\shopping-cart %281%29.png" />
+    <None Include="Resources\businessman %282%29.png" />
+    <None Include="Resources\businessman %284%29.png" />
+    <None Include="Resources\desactivate.png" />
+    <None Include="Resources\list-button.png" />
+    <None Include="Resources\description.png" />
+    <None Include="Resources\car.png" />
+    <None Include="Resources\car %281%29.png" />
+    <None Include="Resources\goto.png" />
+    <Content Include="Resources\mas.png" />
+    <None Include="Resources\mas1.png" />
+    <Content Include="Resources\sobresalir1.png" />
+    <None Include="Resources\square.png" />
+    <None Include="Resources\sort-by-attributes.png" />
+    <Content Include="Resources\transmasivo %281%29.ico" />
+    <None Include="Resources\transmasivo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

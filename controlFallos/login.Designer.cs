@@ -1,0 +1,310 @@
+﻿namespace controlFallos
+{
+    partial class login
+    {
+        /// <summary>
+        /// Variable del diseñador necesaria.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Limpiar los recursos que se estén usando.
+        /// </summary>
+        /// <param name="disposing">true si los recursos administrados se deben desechar; false en caso contrario.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Código generado por el Diseñador de Windows Forms
+
+        /// <summary>
+        /// Método necesario para admitir el Diseñador. No se puede modificar
+        /// el contenido de este método con el editor de código.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.status = new System.Windows.Forms.Panel();
+            this.lbltitle = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lbllogin = new System.Windows.Forms.Label();
+            this.btnlogin = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblintentos = new System.Windows.Forms.Label();
+            this.lblsistemaBloqueado = new System.Windows.Forms.Label();
+            this.plogin = new System.Windows.Forms.Panel();
+            this.txtgetpass = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtgetusu = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.status.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.plogin.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // status
+            // 
+            this.status.BackColor = System.Drawing.Color.Crimson;
+            this.status.Controls.Add(this.lbltitle);
+            this.status.Controls.Add(this.label6);
+            this.status.Controls.Add(this.panel2);
+            this.status.Location = new System.Drawing.Point(0, -1);
+            this.status.Name = "status";
+            this.status.Size = new System.Drawing.Size(706, 23);
+            this.status.TabIndex = 50;
+            this.status.MouseDown += new System.Windows.Forms.MouseEventHandler(this.status_MouseDown);
+            // 
+            // lbltitle
+            // 
+            this.lbltitle.AutoSize = true;
+            this.lbltitle.BackColor = System.Drawing.Color.Crimson;
+            this.lbltitle.Font = new System.Drawing.Font("Garamond", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbltitle.ForeColor = System.Drawing.Color.White;
+            this.lbltitle.Location = new System.Drawing.Point(233, -1);
+            this.lbltitle.Name = "lbltitle";
+            this.lbltitle.Size = new System.Drawing.Size(254, 24);
+            this.lbltitle.TabIndex = 4;
+            this.lbltitle.Text = "Sistema de Reporte de Fallos ";
+            this.lbltitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbltitle_MouseDown);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.label6.Font = new System.Drawing.Font("Arial Black", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.SystemColors.Control;
+            this.label6.Location = new System.Drawing.Point(671, -5);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(34, 33);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "X";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.SteelBlue;
+            this.panel2.Location = new System.Drawing.Point(8, 53);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(204, 171);
+            this.panel2.TabIndex = 1;
+            // 
+            // lbllogin
+            // 
+            this.lbllogin.AutoSize = true;
+            this.lbllogin.Font = new System.Drawing.Font("Garamond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbllogin.Location = new System.Drawing.Point(600, 226);
+            this.lbllogin.Name = "lbllogin";
+            this.lbllogin.Size = new System.Drawing.Size(93, 18);
+            this.lbllogin.TabIndex = 52;
+            this.lbllogin.Text = "Iniciar Sesión";
+            // 
+            // btnlogin
+            // 
+            this.btnlogin.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnlogin.FlatAppearance.BorderSize = 0;
+            this.btnlogin.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkGray;
+            this.btnlogin.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.btnlogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnlogin.Font = new System.Drawing.Font("Garamond", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnlogin.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.btnlogin.Image = global::controlFallos.Properties.Resources.login;
+            this.btnlogin.Location = new System.Drawing.Point(624, 185);
+            this.btnlogin.Name = "btnlogin";
+            this.btnlogin.Size = new System.Drawing.Size(42, 38);
+            this.btnlogin.TabIndex = 51;
+            this.btnlogin.UseVisualStyleBackColor = true;
+            this.btnlogin.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Image = global::controlFallos.Properties.Resources.Dbkel_CXkAE43aG;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 55);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(304, 178);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 8;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblintentos
+            // 
+            this.lblintentos.AutoSize = true;
+            this.lblintentos.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblintentos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.lblintentos.Location = new System.Drawing.Point(321, 210);
+            this.lblintentos.Name = "lblintentos";
+            this.lblintentos.Size = new System.Drawing.Size(0, 21);
+            this.lblintentos.TabIndex = 53;
+            this.lblintentos.Visible = false;
+            // 
+            // lblsistemaBloqueado
+            // 
+            this.lblsistemaBloqueado.AutoSize = true;
+            this.lblsistemaBloqueado.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblsistemaBloqueado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.lblsistemaBloqueado.Location = new System.Drawing.Point(447, 116);
+            this.lblsistemaBloqueado.Name = "lblsistemaBloqueado";
+            this.lblsistemaBloqueado.Size = new System.Drawing.Size(155, 21);
+            this.lblsistemaBloqueado.TabIndex = 54;
+            this.lblsistemaBloqueado.Text = "Sistema Bloqueado!";
+            this.lblsistemaBloqueado.Visible = false;
+            // 
+            // plogin
+            // 
+            this.plogin.Controls.Add(this.txtgetpass);
+            this.plogin.Controls.Add(this.label4);
+            this.plogin.Controls.Add(this.txtgetusu);
+            this.plogin.Controls.Add(this.label2);
+            this.plogin.Controls.Add(this.label1);
+            this.plogin.Controls.Add(this.label3);
+            this.plogin.Location = new System.Drawing.Point(336, 55);
+            this.plogin.Name = "plogin";
+            this.plogin.Size = new System.Drawing.Size(330, 124);
+            this.plogin.TabIndex = 0;
+            // 
+            // txtgetpass
+            // 
+            this.txtgetpass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.txtgetpass.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtgetpass.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtgetpass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.txtgetpass.Location = new System.Drawing.Point(120, 81);
+            this.txtgetpass.MaxLength = 20;
+            this.txtgetpass.Name = "txtgetpass";
+            this.txtgetpass.ShortcutsEnabled = false;
+            this.txtgetpass.Size = new System.Drawing.Size(189, 22);
+            this.txtgetpass.TabIndex = 14;
+            this.txtgetpass.UseSystemPasswordChar = true;
+            this.txtgetpass.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox2_KeyPress);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.label4.Location = new System.Drawing.Point(19, 82);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(95, 21);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Contraseña";
+            // 
+            // txtgetusu
+            // 
+            this.txtgetusu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.txtgetusu.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtgetusu.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtgetusu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.txtgetusu.Location = new System.Drawing.Point(120, 20);
+            this.txtgetusu.MaxLength = 20;
+            this.txtgetusu.Name = "txtgetusu";
+            this.txtgetusu.ShortcutsEnabled = false;
+            this.txtgetusu.Size = new System.Drawing.Size(189, 22);
+            this.txtgetusu.TabIndex = 13;
+            this.txtgetusu.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtgetusu_KeyPress);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.label2.Location = new System.Drawing.Point(118, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(193, 13);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "_______________________________";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.label1.Location = new System.Drawing.Point(47, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 21);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Usuario";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
+            this.label3.Location = new System.Drawing.Point(118, 91);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(193, 13);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "_______________________________";
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick_1);
+            // 
+            // timer2
+            // 
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
+            // login
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.ClientSize = new System.Drawing.Size(705, 257);
+            this.Controls.Add(this.plogin);
+            this.Controls.Add(this.lblsistemaBloqueado);
+            this.Controls.Add(this.lblintentos);
+            this.Controls.Add(this.lbllogin);
+            this.Controls.Add(this.btnlogin);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.status);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "login";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Form1";
+            this.TopMost = true;
+            this.Load += new System.EventHandler(this.login_Load);
+            this.status.ResumeLayout(false);
+            this.status.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.plogin.ResumeLayout(false);
+            this.plogin.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Panel status;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnlogin;
+        private System.Windows.Forms.Label lbllogin;
+        private System.Windows.Forms.Label lbltitle;
+        public System.Windows.Forms.Label lblintentos;
+        public System.Windows.Forms.Label lblsistemaBloqueado;
+        private System.Windows.Forms.Panel plogin;
+        private System.Windows.Forms.TextBox txtgetpass;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtgetusu;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer2;
+    }
+}
+
