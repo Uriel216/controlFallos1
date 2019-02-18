@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("controlFallos")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hewlett-Packard Company")]
+[assembly: AssemblyCompany("Becarios Sistemas")]
 [assembly: AssemblyProduct("controlFallos")]
-[assembly: AssemblyCopyright("Copyright © Hewlett-Packard Company 2018")]
+[assembly: AssemblyCopyright("Transmasivo 2018-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

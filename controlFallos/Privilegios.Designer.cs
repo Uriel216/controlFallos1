@@ -45,9 +45,9 @@
             this.pClave = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbprivilegios)).BeginInit();
             this.panel2.SuspendLayout();
@@ -68,6 +68,7 @@
             // 
             // button1
             // 
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Dock = System.Windows.Forms.DockStyle.Right;
             this.button1.FlatAppearance.BorderSize = 0;
@@ -89,11 +90,11 @@
             this.lbltitle.BackColor = System.Drawing.Color.Crimson;
             this.lbltitle.Font = new System.Drawing.Font("Garamond", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbltitle.ForeColor = System.Drawing.Color.White;
-            this.lbltitle.Location = new System.Drawing.Point(180, 1);
+            this.lbltitle.Location = new System.Drawing.Point(187, 1);
             this.lbltitle.Name = "lbltitle";
-            this.lbltitle.Size = new System.Drawing.Size(420, 24);
+            this.lbltitle.Size = new System.Drawing.Size(188, 24);
             this.lbltitle.TabIndex = 1;
-            this.lbltitle.Text = "Sistema de Reporte de Fallos - Asignar Privilegios";
+            this.lbltitle.Text = "Asignar Privilegios a: ";
             this.lbltitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
             // tbprivilegios
@@ -102,6 +103,7 @@
             this.tbprivilegios.AllowUserToDeleteRows = false;
             this.tbprivilegios.AllowUserToResizeColumns = false;
             this.tbprivilegios.AllowUserToResizeRows = false;
+            this.tbprivilegios.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.tbprivilegios.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.tbprivilegios.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbprivilegios.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SunkenHorizontal;
@@ -141,7 +143,7 @@
             this.tbprivilegios.Name = "tbprivilegios";
             this.tbprivilegios.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
             this.tbprivilegios.RowHeadersVisible = false;
-            this.tbprivilegios.Size = new System.Drawing.Size(783, 193);
+            this.tbprivilegios.Size = new System.Drawing.Size(783, 273);
             this.tbprivilegios.TabIndex = 1;
             this.tbprivilegios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tbprivilegios_CellContentClick);
             // 
@@ -160,6 +162,7 @@
             // 
             // Ver
             // 
+            this.Ver.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -167,30 +170,32 @@
             dataGridViewCellStyle2.NullValue = false;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.SteelBlue;
             this.Ver.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Ver.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Ver.HeaderText = "Ver";
             this.Ver.Name = "Ver";
-            this.Ver.Width = 50;
             // 
             // _insertar
             // 
             this._insertar.HeaderText = "Insertar";
             this._insertar.Name = "_insertar";
+            this._insertar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // Consultar
             // 
             this.Consultar.HeaderText = "Consultar";
             this.Consultar.Name = "Consultar";
+            this.Consultar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // Modificar
             // 
             this.Modificar.HeaderText = "Modificar";
             this.Modificar.Name = "Modificar";
+            this.Modificar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // Eliminar
             // 
-            this.Eliminar.HeaderText = "Eliminar";
+            this.Eliminar.HeaderText = "Desactivar";
             this.Eliminar.Name = "Eliminar";
+            this.Eliminar.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // pClave
             // 
@@ -203,49 +208,22 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
-            this.label1.Location = new System.Drawing.Point(545, 239);
+            this.label1.Location = new System.Drawing.Point(531, 319);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(133, 21);
+            this.label1.Size = new System.Drawing.Size(147, 21);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Aplicar Cambios";
+            this.label1.Text = "Asignar Privilegios";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Garamond", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(44)))), ((int)(((byte)(52)))));
-            this.label2.Location = new System.Drawing.Point(97, 239);
+            this.label2.Location = new System.Drawing.Point(92, 319);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(200, 21);
             this.label2.TabIndex = 5;
             this.label2.Text = "Limpiar Todas las Casillas";
-            // 
-            // button3
-            // 
-            this.button3.BackgroundImage = global::controlFallos.Properties.Resources.eraser;
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(173, 199);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(41, 37);
-            this.button3.TabIndex = 4;
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.BackgroundImage = global::controlFallos.Properties.Resources.foursquare_button;
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(589, 199);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(41, 37);
-            this.button2.TabIndex = 2;
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // panel2
             // 
@@ -257,21 +235,51 @@
             this.panel2.Controls.Add(this.button3);
             this.panel2.Location = new System.Drawing.Point(5, 27);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(787, 277);
+            this.panel2.Size = new System.Drawing.Size(787, 375);
             this.panel2.TabIndex = 7;
+            // 
+            // button2
+            // 
+            this.button2.BackgroundImage = global::controlFallos.Properties.Resources.foursquare_button;
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Location = new System.Drawing.Point(584, 279);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(41, 37);
+            this.button2.TabIndex = 2;
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.BackgroundImage = global::controlFallos.Properties.Resources.eraser;
+            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Location = new System.Drawing.Point(168, 279);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(41, 37);
+            this.button3.TabIndex = 4;
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Privilegios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.ClientSize = new System.Drawing.Size(797, 313);
+            this.ClientSize = new System.Drawing.Size(797, 408);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Privilegios";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Privilegios";
+            this.TopMost = true;
+            this.Load += new System.EventHandler(this.Privilegios_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbprivilegios)).EndInit();

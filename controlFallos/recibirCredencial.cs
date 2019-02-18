@@ -12,11 +12,17 @@ namespace controlFallos
 {
     public partial class recibirCredencial : Form
     {
+        conexion c = new conexion();
         validaciones v = new validaciones();
-        public recibirCredencial(string credencial)
+        int idUsuarioTemp, idUsuario, empresa, area;
+        public recibirCredencial(string credencial,int idUsuarioTemp,int idUsuario,int empresa,int area)
         {
             InitializeComponent();
             lblmsg.Text = "La Credencial Num. "+credencial+" ya está en uso. Ingrese una nueva";
+            this.idUsuarioTemp = idUsuarioTemp;
+            this.idUsuario= idUsuario;
+            this.empresa = empresa;
+            this.area= area;
         }
 
         private void recibirCredencial_Load(object sender, EventArgs e)
@@ -32,6 +38,29 @@ namespace controlFallos
         private void txtgetcredencial_KeyPress(object sender, KeyPressEventArgs e)
         {
             v.Solonumeros(e);
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnguardar_Click_1(object sender, EventArgs e)
+        {
+            if (!v.existecredencialEmpleado(txtgetcredencial.Text) )
+            {
+                if (Convert.ToInt32(txtgetcredencial.Text) > 0) {
+                    if (c.insertar("UPDATE cpersonal SET credencial='" + txtgetcredencial.Text + "' WHERE idpersona =" + this.idUsuarioTemp))
+                    {
+                        MessageBox.Show("Credencial modificada Exitosamente.", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        Close();
+                    }
+                }else
+                {
+                    MessageBox.Show("La Credencial No Puede Ser Igual a \"0\"", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
     }
 }

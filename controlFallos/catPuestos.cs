@@ -16,6 +16,11 @@ namespace controlFallos
         validaciones v = new validaciones();
         int idUsuario, empresa,area,idpuesto,status;
         string puestoAnterior;
+        public bool Pinsertar{ set; get; }
+        public bool Peditar{get;set;}
+        public bool Pconsultar { set; get; }
+        public bool Pdesactivar { set; get; }
+        bool yaAparecioMensaje = false;
         bool editar;
         public catPuestos(int idUsuario,int empresa,int area)
         {
@@ -23,20 +28,70 @@ namespace controlFallos
             this.idUsuario = idUsuario;
             this.empresa = empresa;
             this.area = area;
+           tbpuestos.MouseWheel += new MouseEventHandler(v.paraComboBox_MouseWheel);
+        }
+        public void privilegiosPuestos()
+        {
+            string sql = "SELECT insertar,consultar,editar,desactivar FROM privilegios WHERE usuariofkcpersonal = '" + this.idUsuario + "' and namform = '"+Name+"'";
+            MySqlCommand cmd = new MySqlCommand(sql, c.dbconection());
+            MySqlDataReader mdr = cmd.ExecuteReader();
+            mdr.Read();
+            Pconsultar = v.getBoolFromInt(mdr.GetInt32("consultar"));
+            Pinsertar = v.getBoolFromInt(mdr.GetInt32("insertar"));
+            Peditar = v.getBoolFromInt(mdr.GetInt32("editar"));
+            Pdesactivar = v.getBoolFromInt(mdr.GetInt32("desactivar"));
+            mdr.Close();
+            c.dbconection().Close();
+            mostrar();
+        }
+        void mostrar()
+        {
+            if (Pinsertar || Peditar)
+            {
+
+                gbpuesto.Visible = true;
+            }
+            if (Pconsultar)
+            {
+               tbpuestos.Visible = true;
+            }
+            if (Peditar)
+            {
+                label22.Visible = true;
+                label23.Visible = true;
+            }
+            if (Peditar && !Pinsertar)
+            {
+                btnsave.BackgroundImage = controlFallos.Properties.Resources.pencil;
+                lblsave.Text = "Editar Puesto";
+                editar = true;
+            }
         }
         void limpiar()
         {
+            if (Pinsertar)
+            {
+                editar = false;
+                btnsave.BackgroundImage = controlFallos.Properties.Resources.save;
+                gbpuesto.Text =  "Agregar Puesto";
+                lblsave.Text = "Agregar";
+            }
+            if (Pconsultar)
+            {
+                busquedapuestos();
+            }
+            btnsave.Visible = lblsave.Visible = true;
             txtgetpuesto.Clear();
             idpuesto = 0;
-            editar = false;
-            btnsave.BackgroundImage = controlFallos.Properties.Resources.save;
-            lblsave.Text = "Agregar Puesto";
-            gbpuesto.Text = "Nuevo Puesto";
-            busquedapuestos();
             pcancel.Visible = true;
+            yaAparecioMensaje = false;
             catPersonal cat = (catPersonal)Owner;
             cat.busemp();
             cat.busqPuestos();
+            if (cat.editar)
+            {
+                cat.csetpuestos.SelectedValue = cat.tipoTemp;
+            }
             pdelete.Visible = false;
             pcancel.Visible = false;
         }
@@ -60,75 +115,68 @@ namespace controlFallos
 
         private void gbpuestos_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-
-            try
-            {
-               idpuesto =Convert.ToInt32(gbpuestos.Rows[e.RowIndex].Cells[0].Value.ToString());
-               txtgetpuesto.Text = puestoAnterior = gbpuestos.Rows[e.RowIndex].Cells[1].Value.ToString();
-               gbpuestos.ClearSelection();
-                gbpuesto.Visible = true;
-                pcancel.Visible = true;
-                editar = true;
-                btnsave.BackgroundImage = controlFallos.Properties.Resources.pencil;
-                lblsave.Text = "Editar Puesto";
-                gbpuesto.Text = "Editar Puesto";
-                pdelete.Visible = true;
-                status = v.getStatusInt(gbpuestos.Rows[e.RowIndex].Cells[3].Value.ToString());
-                if (status == 0)
+            if (e.RowIndex>=0) {
+                if (idpuesto>0 && !v.mayusculas(txtgetpuesto.Text.Trim().ToLower()).Equals(puestoAnterior) && Peditar && status == 1)
                 {
-                    btndelete.BackgroundImage = controlFallos.Properties.Resources.up;
-                    lbldelete.Text = "Reactivar Puesto";
-                }
-                else
-                {
-                    btndelete.BackgroundImage = controlFallos.Properties.Resources.delete__4_;
-                    lbldelete.Text = "Desactivar Puesto";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,"Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Error);
-            }
-        }
-
-        private void btndelete_Click(object sender, EventArgs e)
-        {
-            int state;
-            string msg;
-            if (status==0)
-            {
-                state = 1;
-                msg = "Re";
-            }
-            else
-            {
-                state = 0;
-                msg = "Des";
-            }
-            if (MessageBox.Show("¿Desea " + msg + "activar el Puesto?", "Control de Fallos",
-        MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        == DialogResult.Yes)
-            {
-                try
-                {
-
-                    String sql = "UPDATE puestos SET status = " + state + " WHERE idpuesto  = " + this.idpuesto;
-                    if (c.insertar(sql))
+                    if (MessageBox.Show("¿Desea Guardar La Información?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        MessageBox.Show("El Puesto ha sido " + msg + "activado");
-                        limpiar();
+                        yaAparecioMensaje = true;
+                        btnsave_Click(null, e);
                     }
                     else
                     {
-                        MessageBox.Show("El empleado no ha sido desactivado");
+                        guardarReporte(e);
                     }
                 }
-                catch (MySqlException ex)
+                else
                 {
-                    MessageBox.Show(ex.ToString());
+                    guardarReporte(e);
                 }
             }
         }
+        void guardarReporte(DataGridViewCellEventArgs e)
+        {
+
+            try
+            {
+                idpuesto = Convert.ToInt32(tbpuestos.Rows[e.RowIndex].Cells[0].Value.ToString());
+                status = v.getStatusInt(tbpuestos.Rows[e.RowIndex].Cells[3].Value.ToString());
+                if (Pdesactivar)
+                {
+                    if (status == 0)
+                    {
+                        btndelete.BackgroundImage = controlFallos.Properties.Resources.up;
+                        lbldelete.Text = "Reactivar";
+                    }
+                    else
+                    {
+                        btndelete.BackgroundImage = controlFallos.Properties.Resources.delete__4_;
+                        lbldelete.Text = "Desactivar";
+                    }
+                    pdelete.Visible = true;
+                }
+                if (Peditar)
+                {
+                    txtgetpuesto.Text = puestoAnterior = v.mayusculas(tbpuestos.Rows[e.RowIndex].Cells[1].Value.ToString().ToLower());
+                    tbpuestos.ClearSelection();
+                    gbpuesto.Visible = true;
+                    pcancel.Visible = true;
+                    editar = true;
+                    btnsave.BackgroundImage = controlFallos.Properties.Resources.pencil;
+                    gbpuesto.Text = "Actualizar Puesto";
+                    lblsave.Text = "Guardar";
+                    btnsave.Visible = lblsave.Visible = false;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+      
 
         private void txtgetpuesto_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -137,7 +185,7 @@ namespace controlFallos
 
         private void gbpuestos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (gbpuestos.Columns[e.ColumnIndex].Name == "Estatus")
+            if (tbpuestos.Columns[e.ColumnIndex].Name == "Estatus")
             {
                 if (Convert.ToString(e.Value) == "Activo")
                 {
@@ -153,14 +201,19 @@ namespace controlFallos
 
         private void catPuestos_Load(object sender, EventArgs e)
         {
-            busquedapuestos();
+            privilegiosPuestos();
+                if (Pconsultar)
+            {
+
+                busquedapuestos();
+            }
         }
 
         private void gbpuestos_CellFormatting_1(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (gbpuestos.Columns[e.ColumnIndex].Name == "Estatus")
+            if (tbpuestos.Columns[e.ColumnIndex].Name == "Estatus")
             {
-                if (Convert.ToString(e.Value) == "Activo")
+                if (Convert.ToString(e.Value) == "Activo".ToUpper())
                 {
 
                     e.CellStyle.BackColor = Color.PaleGreen;
@@ -188,7 +241,7 @@ namespace controlFallos
                 msg = "Des";
 
             }
-            if (MessageBox.Show("¿Esta Seguro de "+msg+"activar el Puesto?", "Control de Fallos",
+            if (MessageBox.Show("¿Esta Seguro de "+msg+"activar el Puesto?", validaciones.MessageBoxTitle.Confirmar.ToString(),
       MessageBoxButtons.YesNo, MessageBoxIcon.Question)
       == DialogResult.Yes)
             {
@@ -197,14 +250,15 @@ namespace controlFallos
                     String sql = "UPDATE puestos SET status = " + state + " WHERE idpuesto  = " + idpuesto;
                     if (c.insertar(sql))
                     {
-                        MessageBox.Show("El Puesto ha sido " + msg + "activado Correctamente", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Puestos','" + idpuesto + "','"+msg+"activación de Puesto','" + idUsuario + "',NOW(),'"+msg+"activación de Puesto','" + empresa + "','" + area + "')");
+                        MessageBox.Show("El Puesto ha sido " + msg + "activado Correctamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
                         limpiar();
 
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -229,76 +283,141 @@ namespace controlFallos
 
         private void btncancel_Click(object sender, EventArgs e)
         {
-            limpiar();
+            if (!v.mayusculas(txtgetpuesto.Text.Trim().ToLower()).Equals(puestoAnterior) && status==1)
+            {
+                if (MessageBox.Show("¿Desea Guardar La Información?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    yaAparecioMensaje = true;
+                    btnsave_Click(null, e);
+                }
+                else
+                {
+                    limpiar();
+                }
+            }
+            else
+            {
+                limpiar();
+            }
+        }
+
+        private void txtgetpuesto_KeyPress_1(object sender, KeyPressEventArgs e)
+        {
+            v.Sololetras(e);
+        }
+
+        private void gbpuesto_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gbpuestos_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            v.paraDataGridViews_ColumnAdded(sender, e);
+        }
+
+        private void txtgetpuesto_Validating(object sender, CancelEventArgs e)
+        {
+            v.espaciosenblanco(sender, e);
+        }
+
+        private void txtgetpuesto_TextChanged(object sender, EventArgs e)
+        {
+            if (editar)
+            {
+                if (status==1 && (!string.IsNullOrWhiteSpace(txtgetpuesto.Text) && puestoAnterior!=v.mayusculas(txtgetpuesto.Text.ToLower().Trim())))
+                {
+                    btnsave.Visible = lblsave.Visible = true;
+                }else
+                {
+                    btnsave.Visible = lblsave.Visible = false;
+                }
+            }
+        }
+
+        private void gbpuesto_Paint(object sender, PaintEventArgs e)
+        {
+            GroupBox box = sender as GroupBox;
+            v.DrawGroupBox(box, e.Graphics, Color.FromArgb(75, 44, 52), Color.FromArgb(75, 44, 52), this);
+        }
+
+        private void lbltitle_MouseDown(object sender, MouseEventArgs e)
+        {
+            v.mover(sender,e,this);
         }
 
         void _editar()
         {
+
             if (idpuesto > 0) {
-                string puesto = v.mayusculas(txtgetpuesto.Text.ToLower());
+                string puesto = v.mayusculas(txtgetpuesto.Text.ToLower()).Trim();
                 if (!string.IsNullOrWhiteSpace(puesto)) {
                     if (!puesto.Equals(puestoAnterior)) {
-                        String sql = "UPDATE puestos SET puesto ='" + puesto + "' WHERE idpuesto = " + this.idpuesto;
-                        if (c.insertar(sql))
-                        {
-                            MessageBox.Show("El Puesto Se Ha Actualizado Correctamente", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            limpiar();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Ha ocurrido un error");
+                        if (!v.yaExistePuesto(puesto,empresa,area)) {
+                            String sql = "UPDATE puestos SET puesto =LTRIM(RTRIM('" + puesto + "')) WHERE idpuesto = " + this.idpuesto;
+                            if (c.insertar(sql))
+                            {
+                                var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Puestos','" + idpuesto + "','"+puestoAnterior+"','" + idUsuario + "',NOW(),'Actualización de Puesto','" + empresa + "','" + area + "')");
+                               if(!yaAparecioMensaje) MessageBox.Show("El Puesto Se Ha Actualizado Correctamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                limpiar();
+                            }
                         }
                     }else
                     {
-                        MessageBox.Show("No Se Realizó Ningún Cambio Al Puesto", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        if (MessageBox.Show("¿Desea Limpiar Los Campos?", "Control de Fallos", MessageBoxButtons.YesNo, MessageBoxIcon.Question)==DialogResult.Yes ) {
+                        MessageBox.Show("No Se Realizó Ningún Cambio Al Puesto", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (MessageBox.Show("¿Desea Limpiar Los Campos?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question)==DialogResult.Yes ) {
                             limpiar();
                         }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("El Nombre del Puesto no puede Estar Vacío", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("El Nombre del Puesto no puede Estar Vacío", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             } else {
-                    MessageBox.Show("Seleccione un Puesto Para Actualizar", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Seleccione un Puesto Para Actualizar", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
         }
         void insertar()
         {
             string puesto = v.mayusculas(txtgetpuesto.Text.ToLower());
-            if (!v.yaExistePuesto(puesto))
-            {
-
-                String sql = "INSERT INTO puestos (puesto,empresa,area,usuariofkcpersonal) VALUES('" + puesto + "','" + empresa + "','" + area + "','"+idUsuario+"')";
-                if (c.insertar(sql))
+            if (!string.IsNullOrWhiteSpace(puesto)) {
+                if (!v.yaExistePuesto(puesto,empresa,area))
                 {
-                    MessageBox.Show("El Puesto Se Ha Insertado Correctamente","Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Information);
-                    limpiar();
 
-                }
-                else
-                {
-                    MessageBox.Show("Ha ocurrido un error");
+                    String sql = "INSERT INTO puestos (puesto,empresa,area,usuariofkcpersonal) VALUES(LTRIM(RTRIM('" + puesto + "')),'" + empresa + "','" + area + "','" + idUsuario + "')";
+                    if (c.insertar(sql))
+                    {
+                        var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Puestos',(SELECT idpuesto FROM puestos WHERE puesto='" + puesto+"' and empresa='"+empresa+"' and area='"+area+"'),'Inserción de Puesto','" + idUsuario + "',NOW(),'Inserción de Puesto','" + empresa + "','" + area + "')");
+                        MessageBox.Show("El Puesto Se Ha Insertado Correctamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        limpiar();
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ha ocurrido un error");
+                    }
                 }
             }
+            else
+            {
+                MessageBox.Show("El Nombre del Puesto no puede Estar Vacío", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+       
         public void busquedapuestos()
         {
-            gbpuestos.Rows.Clear();
-            String sql = "SELECT t1.idpuesto as id, t1.puesto, t1.status,CONCAT(t2.nombres,' ',t2.apPaterno,' ',t2.apMaterno) as persona  FROM puestos as t1 INNER JOIN cpersonal as t2 ON t1.usuariofkcpersonal = t2.idpersona WHERE t1.empresa = '" + empresa + "' and t1.area ='"+area+"' ORDER BY puesto ASC";
+            tbpuestos.Rows.Clear();
+            String sql = "SELECT t1.idpuesto as id, UPPER(t1.puesto) AS puesto, t1.status, UPPER(CONCAT(t2.nombres,' ',t2.apPaterno,' ',t2.apMaterno)) as persona  FROM puestos as t1 INNER JOIN cpersonal as t2 ON t1.usuariofkcpersonal = t2.idpersona WHERE t1.empresa = '" + empresa + "' and t1.area ='"+area+"' ORDER BY puesto ASC";
             MySqlCommand cm = new MySqlCommand(sql, c.dbconection());
             MySqlDataReader dr = cm.ExecuteReader();
             while (dr.Read())
             {
-                gbpuestos.Rows.Add(dr.GetString("id"), dr.GetString("puesto"), dr.GetString("persona"), v.getStatusString(dr.GetInt32("status")));
+                tbpuestos.Rows.Add(dr.GetString("id"), dr.GetString("puesto"), dr.GetString("persona"), v.getStatusString(dr.GetInt32("status")));
             }
-        
-            gbpuestos.ClearSelection();
+            dr.Close();
+            c.dbconection().Close();
+            tbpuestos.ClearSelection();
         }
     }
 }

@@ -17,18 +17,45 @@ namespace controlFallos
         int idfamTemp;
         bool reactivar;
         string familiaAnterior,descAnterior;
-        int _status;
-        bool editar;
+        int _status,empresa,area;
+        bool editar,yaAparecioMensaje;
         int idUsuario;
+
         public bool Pinsertar { set; get; }
         public bool Peditar { get; set; }
         public bool Pconsultar { set; get; }
         public bool Pdesactivar { set; get; }
-        public familias(int idUsuario)
+        new catRefacciones Owner;
+        public familias(int idUsuario,int empresa, int area,Form fh)
         {
             InitializeComponent();
             txtnombre.Focus();
             this.idUsuario = idUsuario;
+            tbfamilias.MouseWheel += new MouseEventHandler(v.paraComboBox_MouseWheel);
+            this.empresa = empresa;
+            this.area = area;
+            Owner = (catRefacciones)fh;
+            DataGridViewCellStyle d = new DataGridViewCellStyle();
+            d.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            d.ForeColor = Color.FromArgb(75, 44, 52);
+            d.SelectionBackColor = Color.Crimson;
+            d.SelectionForeColor = Color.White;
+            d.Font = new Font("Garamond", 14, FontStyle.Bold);
+            d.WrapMode = DataGridViewTriState.True; d.BackColor = Color.FromArgb(200, 200, 200);
+            tbfamilias.ColumnHeadersDefaultCellStyle = d;
+        }
+        void getCambios(object sender, EventArgs e)
+        {
+            if (editar)
+            {
+                if (_status == 1 && ((!string.IsNullOrWhiteSpace(txtnombre.Text) && familiaAnterior != v.mayusculas(txtnombre.Text.ToLower().Trim())) || (!string.IsNullOrWhiteSpace(txtdescfamilia.Text) && descAnterior != v.mayusculas(txtdescfamilia.Text.ToLower().Trim()))))
+                {
+                    btnsave.Visible = lblsave.Visible = true;
+                } else
+                {
+                    btnsave.Visible = lblsave.Visible = false;
+                }
+            }
         }
         public void establecerPrivilegios()
         {
@@ -42,6 +69,7 @@ namespace controlFallos
                 Peditar = v.getBoolFromInt(mdr.GetInt32("editar"));
                 Pdesactivar = v.getBoolFromInt(mdr.GetInt32("desactivar"));
             }
+            mdr.Close();
             c.dbcon.Close();
             mostrar();
         }
@@ -75,7 +103,7 @@ namespace controlFallos
             }catch(Exception ex)
 
             {
-                MessageBox.Show(ex.Message, "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         void _insertar()
@@ -85,9 +113,11 @@ namespace controlFallos
             if (!v.formulariofamilias(nombre, desc) && !v.existeFamilia(nombre, desc))
             {
 
-                if (c.insertar("INSERT INTO cfamilias (familia,descripcionFamilia,usuariofkcpersonal) VALUES('" + v.mayusculas(nombre.ToLower()) + "','" + v.mayusculas(desc.ToLower()) + "','" + idUsuario + "')"))
+                if (c.insertar("INSERT INTO cfamilias (familia,descripcionFamilia,usuariofkcpersonal) VALUES(LTRIM(RTRIM('" + v.mayusculas(nombre.ToLower()) + "')),LTRIM(RTRIM('" + v.mayusculas(desc.ToLower()) + "')),'" + idUsuario + "')"))
                 {
-                    MessageBox.Show("Familia Insertada Exitosamente","Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                    var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Refacciones - Familias',(SELECT idfamilia FROM cfamilias WHERE familia='"+nombre+ "' AND descripcionFamilia='"+desc+"'),'"+nombre+";"+desc+"','" + idUsuario + "',NOW(),'Inserción de Familia','" + empresa + "','" + area + "')");
+                    Owner.familia = v.getaData("SELECT idfamilia FROM cfamilias WHERE familia='" + nombre + "' AND descripcionFamilia='" + desc + "'").ToString();
+                    MessageBox.Show("Familia Insertada Exitosamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK,MessageBoxIcon.Information);
                     limpiar();
                 }
             }
@@ -96,23 +126,29 @@ namespace controlFallos
         {
             string nombre = v.mayusculas(txtnombre.Text.ToLower());
             string desc = v.mayusculas(txtdescfamilia.Text.ToLower());
-            if (!v.formulariofamilias(nombre, desc) && !v.existefamiliaActualizar(nombre, familiaAnterior, desc, descAnterior))
-            {
-                if (nombre.Equals(familiaAnterior) && desc.Equals(descAnterior))
-            {
-                MessageBox.Show("No se Realizaron Modificaciones","Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Information);
-                    if (MessageBox.Show("¿Desea Limpiar los Campos?", "Control de Fallos", MessageBoxButtons.YesNo, MessageBoxIcon.Information)==DialogResult.Yes)
+            if (this._status==1) {
+                if (!v.formulariofamilias(nombre, desc) && !v.existefamiliaActualizar(nombre, familiaAnterior, desc, descAnterior))
+                {
+                    if (nombre.Equals(familiaAnterior) && desc.Equals(descAnterior))
                     {
-                        limpiar();
-                    }
-            }else { 
-              
-                    if (c.insertar("UPDATE cfamilias SET familia ='" + v.mayusculas(nombre.ToLower()) + "', descripcionFamilia='" + v.mayusculas(desc.ToLower()) + "' WHERE idfamilia=" + this.idfamTemp))
-                    {
-                        MessageBox.Show("Familia Actualizada Exitosamente", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        limpiar();
+                        MessageBox.Show("No se Realizaron Modificaciones", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (MessageBox.Show("¿Desea Limpiar los Campos?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        {
+                            limpiar();
+                        }
+                    } else {
+
+                        if (c.insertar("UPDATE cfamilias SET familia =LTRIM(RTRIM('" + v.mayusculas(nombre.ToLower()) + "')), descripcionFamilia=LTRIM(RTRIM('" + v.mayusculas(desc.ToLower()) + "')) WHERE idfamilia=" + this.idfamTemp))
+                        {
+                            var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Refacciones - Familias','"+idfamTemp+"','" + familiaAnterior + ";" + descAnterior + "','" + idUsuario + "',NOW(),'Actualización de Familia','" + empresa + "','" + area + "')");
+                           if(!yaAparecioMensaje) MessageBox.Show("Familia Actualizada Exitosamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            limpiar();
+                        }
                     }
                 }
+            }else
+            {
+                MessageBox.Show("No se Puede Modificar una Familia Desactivada", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
         private void txtnombre_KeyPress(object sender, KeyPressEventArgs e)
@@ -124,18 +160,20 @@ namespace controlFallos
             try
             {
                 tbfamilias.Rows.Clear();
-                string sql = "SELECT t1.idfamilia,t1.familia,t1.descripcionfamilia,t1.status,CONCAT(t2.nombres,' ',t2.apPaterno,' ',t2.apMaterno) as nombre FROM cfamilias as t1 INNER JOIN cpersonal as t2 ON t1.usuariofkcpersonal= t2.idpersona";
+                string sql = "SELECT t1.idfamilia,upper(t1.familia) as familia,UPPER(t1.descripcionfamilia) as descripcionfamilia,t1.status,UPPER(CONCAT(t2.nombres,' ',t2.apPaterno,' ',t2.apMaterno)) as nombre FROM cfamilias as t1 INNER JOIN cpersonal as t2 ON t1.usuariofkcpersonal= t2.idpersona";
                 MySqlCommand cm = new MySqlCommand(sql, c.dbconection());
                 MySqlDataReader dr = cm.ExecuteReader();
                 while (dr.Read())
                 {
                     tbfamilias.Rows.Add(dr.GetString("idfamilia"), dr.GetString("familia"), dr.GetString("descripcionfamilia"), dr.GetString("nombre"), v.getStatusString(dr.GetInt32("status")));
                 }
+                dr.Close();
+                c.dbconection().Close();
                 tbfamilias.ClearSelection();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             }
 
@@ -143,7 +181,7 @@ namespace controlFallos
         {
             if (tbfamilias.Columns[e.ColumnIndex].Name == "Estatus")
             {
-                if (Convert.ToString(e.Value) == "Activo")
+                if (Convert.ToString(e.Value) == "Activo".ToUpper())
                 {
 
                     e.CellStyle.BackColor = Color.PaleGreen;
@@ -166,47 +204,85 @@ namespace controlFallos
 
         private void tbfamilias_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex>=0)
+            {
+                if (idfamTemp>0 && Peditar &&(!(v.mayusculas(txtnombre.Text.ToLower())).Trim().Equals(familiaAnterior) || !v.mayusculas(txtdescfamilia.Text.ToLower()).Trim().Equals(descAnterior)) && _status == 1)
+                {
+                    if (MessageBox.Show("¿Desea Guardar la Información?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        yaAparecioMensaje = true;
+                        button10_Click(null, e);
+                    }
+                    else
+                    {
+                        guardarReporte(e);
+                    }
+                }
+                else
+                {
+                    guardarReporte(e);
+                }
+            }
+        }
+        void guardarReporte(DataGridViewCellEventArgs e)
+        {
             try
             {
                 this.idfamTemp = Convert.ToInt32(tbfamilias.Rows[e.RowIndex].Cells[0].Value);
                 _status = v.getStatusInt(tbfamilias.Rows[e.RowIndex].Cells[4].Value.ToString());
 
-                if (Pdesactivar){
+                if (Pdesactivar)
+                {
                     pdeletefam.Visible = true;
                     if (_status == 0)
                     {
                         reactivar = true;
                         btndeleteuser.BackgroundImage = controlFallos.Properties.Resources.up;
-                        lbldeletefam.Text = "Reactivar Familia";
+                        lbldeletefam.Text = "Reactivar";
                     }
                     else
                     {
                         reactivar = false;
                         btndeleteuser.BackgroundImage = controlFallos.Properties.Resources.delete__4_;
-                        lbldeletefam.Text = "Deactivar Familia";
+                        lbldeletefam.Text = "Deactivar";
                     }
 
                 }
                 if (Peditar)
                 {
-                    txtnombre.Text = familiaAnterior = (string)tbfamilias.Rows[e.RowIndex].Cells[1].Value;
-                    txtdescfamilia.Text = descAnterior = (string)tbfamilias.Rows[e.RowIndex].Cells[2].Value;
-                    btnsave.BackgroundImage = controlFallos.Properties.Resources.pencil;
-                    lblsave.Text = "Editar Familia";
+                    txtnombre.Text = familiaAnterior = v.mayusculas(tbfamilias.Rows[e.RowIndex].Cells[1].Value.ToString().ToLower());
+                    txtdescfamilia.Text = descAnterior = v.mayusculas(tbfamilias.Rows[e.RowIndex].Cells[2].Value.ToString().ToLower());
+                    btnsave.BackgroundImage = Properties.Resources.pencil;
+                    lblsave.Text = "Guardar";
+                    gbaddfamilia.Text = "Actualizar Familia de Refacciones";
                     pcancel.Visible = true;
-                    editar = true;
+                    editar = true; btnsave.Visible = lblsave.Visible = false;
 
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            limpiar();
+            if (!(v.mayusculas(txtnombre.Text.ToLower())).Trim().Equals(familiaAnterior) || !v.mayusculas(txtdescfamilia.Text.ToLower()).Trim().Equals(descAnterior) && _status==1)
+            {
+                if (MessageBox.Show("¿Desea Guardar la Información?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    yaAparecioMensaje = true;
+                    button10_Click(null, e);
+                }
+                else
+                {
+                    limpiar();
+                }
+            }
+            else
+            {
+                limpiar();
+            }
         }
 
         private void btndeleteuser_Click(object sender, EventArgs e)
@@ -220,16 +296,16 @@ namespace controlFallos
                 {
                     texto = "¿Desea Reactivar la Familia de Refacciones";
                     status = 1;
-                    msg = "Reactivado";
+                    msg = "Re";
                 }
                 else
                 {
                     texto = "¿Desea Desactivar la Familia de Refacciones?";
                     status = 0;
-                    msg = "Desactivado";
+                    msg = "Des";
 
                 }
-                if (MessageBox.Show(texto, "Control de Fallos",
+                if (MessageBox.Show(texto, validaciones.MessageBoxTitle.Confirmar.ToString(),
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                   == DialogResult.Yes)
                 {
@@ -238,21 +314,53 @@ namespace controlFallos
                         String sql = "UPDATE cfamilias SET status = " + status + " WHERE idfamilia  = " + this.idfamTemp;
                         if (c.insertar(sql))
                         {
-                            MessageBox.Show("La Familia de Refacciones ha sido " + msg, "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Refacciones - Familias','" + this.idfamTemp+ "','" + msg + "activación de Familia','" + idUsuario + "',NOW(),'" + msg + "activación de Unidad de Medida','" + empresa + "','" + area + "')");
+                            MessageBox.Show("La Familia de Refacciones ha sido " + msg+"activado Correctamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
                             limpiar();
                             insertarfamilias();
                         } else
                         {
-                            MessageBox.Show("La Familia de Refacciones no ha sido " + msg, "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("La Familia de Refacciones no ha sido " + msg+ "activado Correctamente", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
+        }
+
+        private void gbaddfamilia_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbfamilias_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            v.paraDataGridViews_ColumnAdded(sender, e);
+        }
+
+        private void gbaddfamilia_Paint(object sender, PaintEventArgs e)
+        {
+            GroupBox box = sender as GroupBox;
+            v.DrawGroupBox(box, e.Graphics, Color.FromArgb(75, 44, 52), Color.FromArgb(75, 44, 52), this);
+        }
+
+        private void tbfamilias_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void pcancel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtnombre_Validating(object sender, CancelEventArgs e)
+        {
+            v.espaciosenblanco(sender, e);
         }
 
         void limpiar()
@@ -261,7 +369,9 @@ namespace controlFallos
             {
                 editar = false;
                 btnsave.BackgroundImage = controlFallos.Properties.Resources.save;
-                lblsave.Text = "Agregar Familia";
+                lblsave.Text = "Agregar";
+
+                gbaddfamilia.Text = "Agregar Familia de Refacciones";
 
             }
             if (Pconsultar)
@@ -275,6 +385,7 @@ namespace controlFallos
             idfamTemp = 0;
             pcancel.Visible = false;
             pdeletefam.Visible = false;
+            yaAparecioMensaje = false;
     }
     }
 }

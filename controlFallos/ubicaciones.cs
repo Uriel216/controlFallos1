@@ -8,24 +8,48 @@ namespace controlFallos
     public partial class ubicaciones : Form
     {
         string idCharolaAnterior;
-        string pasilloAnterior;
-        string anaquelAnterior;
+        int  pasilloAnterior,anaquelAnterior,nivelAnterior;
         string charolaAnterior;
         int _status;
         bool editar;
         int idUsuario;
+        int empresa,area;
+        public string pasilloTemp, nivelTemp; 
         public bool Pinsertar { set; get; }
         public bool Peditar { get; set; }
         public bool Pconsultar { set; get; }
         public bool Pdesactivar { set; get; }
+        bool yaAparecioMensaje = false;
         conexion c = new conexion();
         validaciones v = new validaciones();
-        public ubicaciones(int idUsuario)
+        new catRefacciones Owner;
+        public ubicaciones(int idUsuario,int empresa,int area,Form fh)
         {
             InitializeComponent();
             this.idUsuario=idUsuario;
+            this.empresa = empresa;
+            this.area = area;
+            cbpasillo.MouseWheel += new MouseEventHandler(v.paraComboBox_MouseWheel);
+            cbanaquel.MouseWheel += new MouseEventHandler(v.paraComboBox_MouseWheel);
+            tbubicaciones.MouseWheel += new MouseEventHandler(v.paraComboBox_MouseWheel);
+            this.Owner = (catRefacciones)fh;
         }
-
+        void getCambios(object sender, EventArgs e)
+        {
+            if (editar) {
+                int pasillo = Convert.ToInt32(cbpasillo.SelectedValue);
+                int nivel=0; if(cbniveles.DataSource!=null) nivel = Convert.ToInt32(cbniveles.SelectedValue);
+                int anaquel = 0; if(cbanaquel.DataSource!=null) anaquel = Convert.ToInt32(cbanaquel.SelectedValue);
+                string charola = txtcharola.Text.Trim();
+                if (_status == 1 && (pasillo>0 && nivel>0 && anaquel>0 && !string.IsNullOrWhiteSpace(charola)) && (pasilloAnterior!=pasillo || nivel!=nivelAnterior || anaquel!=anaquelAnterior || !charola.Equals(charolaAnterior))  )
+                {
+                    btnsave.Visible = lblsave.Visible = true;
+                } else
+                {
+                    btnsave.Visible = lblsave.Visible = false;
+                }
+            }
+        }
         public void establecerPrivilegios()
         {
             string sql = "SELECT insertar,consultar,editar, desactivar  FROM privilegios WHERE usuariofkcpersonal = '" + this.idUsuario + "' and namform = 'catRefacciones'";
@@ -38,6 +62,7 @@ namespace controlFallos
                 Peditar = v.getBoolFromInt(mdr.GetInt32("editar"));
                 Pdesactivar = v.getBoolFromInt(mdr.GetInt32("desactivar"));
             }
+            mdr.Close();
             c.dbcon.Close();
             mostrar();
         }
@@ -60,14 +85,29 @@ namespace controlFallos
         }
         private void button7_Click(object sender, EventArgs e)
         {
-            catPasillos cP = new catPasillos(this.idUsuario);
+            catPasillos cP = new catPasillos(this.idUsuario,empresa,area);
             cP.Owner = this;
             cP.ShowDialog();
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            limpiar();
+           
+            int pasillo = Convert.ToInt32(cbpasillo.SelectedValue);
+            int nivel = 0; if (cbniveles.DataSource != null) nivel = Convert.ToInt32(cbniveles.SelectedValue);
+            int anaquel = 0; if (cbanaquel.DataSource != null) anaquel = Convert.ToInt32(cbanaquel.SelectedValue);
+            string charola = txtcharola.Text.Trim();
+            if (_status == 1 && (pasillo > 0 && nivel > 0 && anaquel > 0 && !string.IsNullOrWhiteSpace(charola)) && (pasilloAnterior != pasillo || nivel != nivelAnterior || anaquel != anaquelAnterior || !charola.Equals(charolaAnterior)))
+            {
+                if (MessageBox.Show("¿Desea Guardar la Información?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    yaAparecioMensaje = true;
+                    button9_Click(null,e);
+                }
+                
+            }
+                limpiar();
+            
         }
 
         private void ubicaciones_Load(object sender, EventArgs e)
@@ -84,7 +124,7 @@ namespace controlFallos
         }
        public  void busqUbic()
         {
-           string sql = "SELECT idpasillo,pasillo FROM cpasillos WHERE status='1'";
+           string sql = "SELECT idpasillo,pasillo FROM cpasillos WHERE status='1' ORDER BY pasillo ASC";
                 DataTable dt = new DataTable();
                 DataRow nuevaFila = dt.NewRow();
                 MySqlCommand cm = new MySqlCommand(sql, c.dbconection());
@@ -94,7 +134,7 @@ namespace controlFallos
                 cbpasillo.ValueMember = "idpasillo";
                 cbpasillo.DisplayMember = "pasillo";
                 nuevaFila["idpasillo"] = 0;
-                nuevaFila["pasillo"] = "--Seleccione pasillo--";
+                nuevaFila["pasillo"] = "--Seleccione pasillo--".ToUpper();
                 dt.Rows.InsertAt(nuevaFila, 0);
                 cbpasillo.DataSource = dt;
                    }
@@ -113,89 +153,62 @@ namespace controlFallos
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
         void _insertarCharola()
         {
-            string charola = txtcharola.Text;
-            if (cbpasillo.SelectedIndex > 0) {
-                if (cbanaquel.SelectedIndex>0) {
-                    if (!v.existeCharola(cbanaquel.SelectedValue.ToString(), charola)) {
-                        if (!v.formularioUbicaciones(null, null, charola, 2)) {
-                            if (c.insertar("INSERT INTO ccharolas (charola, anaquelfkcanaqueles) VALUES ('" + charola + "','" + cbanaquel.SelectedValue + "')"))
-                            {
-                                MessageBox.Show("Ubicacion Insertada");
-                               
-                                busqUbic();
-                                limpiar();
-                    
-                            }
-
-                            else
-                            {
-                                limpiar();
-                            }
-                        }
-
-                    }
-                }else
-                {
-
-                    MessageBox.Show("Seleccione un Anaquel de la Lista Desplegable", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }else
+            int pasillo = Convert.ToInt32(cbpasillo.SelectedValue);
+            int nivel=0;if (cbniveles.DataSource != null) nivel = Convert.ToInt32(cbniveles.SelectedValue);
+            int anaquel = 0; if(cbanaquel.DataSource!=null) anaquel = Convert.ToInt32(cbanaquel.SelectedValue);
+            string charola = txtcharola.Text.Trim();
+            if (v.formularioUbicaciones(pasillo,nivel,anaquel,charola) && !v.existeCharola(anaquel, charola))
             {
-
-                MessageBox.Show("Seleccione un Pasillo de la Lista desplegable", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (c.insertar("INSERT INTO ccharolas (charola, anaquelfkcanaqueles) VALUES (LTRIM(RTRIM('" + charola + "')),'" + anaquel +"')"))
+                    {
+                        var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Refacciones - Ubicaciones',(SELECT idcharola FROM ccharolas WHERE anaquelfkcanaqueles='" + cbanaquel.SelectedValue + "' and charola='" + charola + "'),'','" + idUsuario + "',NOW(),'Inserción de Ubicación','" + empresa + "','" + area + "')");
+                    Owner.charola = v.getaData("SELECT idcharola FROM ccharolas WHERE anaquelfkcanaqueles='" + cbanaquel.SelectedValue + "' and charola='" + charola + "'").ToString();
+                   
+                    MessageBox.Show("Ubicacion Insertada Correctamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        busqUbic();
+                        limpiar();
+                    }
             }
-        }  
+             
+        }
         void _editarCharola()
         {
-            if (!string.IsNullOrWhiteSpace(idCharolaAnterior)) {
-                string anaquel = cbanaquel.SelectedValue.ToString();
-                string charola = txtcharola.Text;
-                if (!v.formularioUbicaciones(null, null, charola, 2))
-                {
-                    if (anaquel.Equals(this.anaquelAnterior) && charola.Equals(this.charolaAnterior))
-                    {
-                        MessageBox.Show("No Se Realizaron Modificaciones", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        if (MessageBox.Show("Desea Limpiar Los Campos", "Control de Fallos", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                        {
-                            limpiar();
-                        }
-                    } else {
-                        if (!v.existeCharolaActualizar(anaquel, charola, this.charolaAnterior)) {
-                            var res = c.insertar("UPDATE ccharolas SET anaquelfkcanaqueles='" + anaquel + "', charola= '" + charola + "' WHERE idcharola ='" + idCharolaAnterior + "'");
-                            MessageBox.Show("Ubicación Actualizada", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            limpiar();
-                        }
-                    }
-                }
-            }else
-            {
-                MessageBox.Show("Seleccione una Charola Para Editar","Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                int pasillo = Convert.ToInt32(cbpasillo.SelectedValue);
+                int nivel = 0; if (cbniveles.DataSource != null) nivel = Convert.ToInt32(cbniveles.SelectedValue);
+                int anaquel = 0; if (cbanaquel.DataSource != null) anaquel = Convert.ToInt32(cbanaquel.SelectedValue);
+                string charola = txtcharola.Text.Trim();
+            if (v.formularioUbicaciones(pasillo, nivel, anaquel, charola) && !v.existeCharolaActualizar(anaquel, charola, this.charolaAnterior))
+            {     
+                var res = c.insertar("UPDATE ccharolas SET anaquelfkcanaqueles='" + anaquel + "', charola= LTRIM(RTRIM('" + charola + "')) WHERE idcharola ='" + idCharolaAnterior + "'");
+                    var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Refacciones - Ubicaciones','" + idCharolaAnterior + "','" + anaquelAnterior + ";" + charolaAnterior + "','" + idUsuario + "',NOW(),'Actualización de Ubicación','" + empresa + "','" + area + "')");
+                    if (!yaAparecioMensaje) MessageBox.Show("Ubicación Actualizada", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    limpiar();
             }
+     
         }
         private void cbpasillo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string sql = "SELECT idanaquel,anaquel FROM canaqueles WHERE status='1' and pasillofkcpasillos = '"+cbpasillo.SelectedValue+"'";
-            DataTable dt = new DataTable();
-            DataRow nuevaFila = dt.NewRow();
-            MySqlCommand cm = new MySqlCommand(sql, c.dbconection());
-            MySqlDataAdapter AdaptadorDatos = new MySqlDataAdapter(cm);
-            AdaptadorDatos.Fill(dt);
-            cbanaquel.ValueMember = "idanaquel";
-            cbanaquel.DisplayMember = "anaquel";
-            nuevaFila["idanaquel"] = 0;
-            nuevaFila["anaquel"] = "--Seleccione Anaquel--";
-            dt.Rows.InsertAt(nuevaFila, 0);
-            cbanaquel.DataSource = dt;
+            if (((ComboBox) sender).SelectedIndex>0 && Convert.ToInt32(v.getaData("SELECT COUNT(*) FROM cniveles where pasillofkcpasillos ='"+cbpasillo.SelectedValue+"'"))>0)
+            {
+                string sql = "SELECT idnivel,UPPER(nivel) AS nivel FROM cniveles WHERE status='1' and pasillofkcpasillos = '" + cbpasillo.SelectedValue + "' ORDER BY nivel ASC";
+                v.iniCombos(sql,cbniveles,"idnivel","nivel","--SELECCIONE UN NIVEL");
+                cbniveles.Enabled = true;
+            }else
+            {
+
+                cbniveles.DataSource = null;
+                cbniveles.Enabled = false;
+            }
         }
 
         private void btnaddanaquel_Click(object sender, EventArgs e)
         {
-            catAnaqueles cat = new catAnaqueles(this.idUsuario);
+            catAnaqueles cat = new catAnaqueles(this.idUsuario,empresa,area);
             cat.Owner = this;
             cat.ShowDialog();
         }
@@ -208,20 +221,21 @@ namespace controlFallos
         void limpiar()
         {
             cbpasillo.SelectedIndex = 0;
-            cbanaquel.SelectedIndex = 0;
             txtcharola.Clear();
 
             pdelete.Visible = false;
             padd.Visible = false;
             idCharolaAnterior = null;
-            pasilloAnterior = null;
-            anaquelAnterior = null;
+            pasilloAnterior = 0;
+            anaquelAnterior = 0;
+            nivelAnterior = 0;
             charolaAnterior = null;
-           
+            btnsave.Visible = lblsave.Visible = true;
             if (Pinsertar)
             {
-                btnsave.BackgroundImage = Properties.Resources.pencil;
-                lbladdcharola.Text = "Agregar Charola";
+                btnsave.BackgroundImage = Properties.Resources.save;
+                gbaddubicacion.Text =  "Agregar Ubicación";
+                lblsave.Text = "Agregar";
                 editar = false;
             }
             if (Pconsultar)
@@ -235,23 +249,18 @@ namespace controlFallos
         public void insertarUbicaciones()
         {
             tbubicaciones.Rows.Clear();
-            string sql = "SELECT t1.idcharola as id,t3.pasillo as p,t2.anaquel as a,t1.charola as c,t1.status,t3.idpasillo,t2.idanaquel FROM ccharolas AS t1 INNER JOIN canaqueles as t2 ON t1.anaquelfkcanaqueles = t2.idanaquel INNER JOIN cpasillos as t3 ON t2.pasillofkcpasillos=t3.idpasillo  ORDER BY pasillo,anaquel,charola ASC";
-            MySqlCommand cm = new MySqlCommand(sql, c.dbconection());
-            MySqlDataReader dr = cm.ExecuteReader();
-            while (dr.Read())
+            DataTable dt =(DataTable) v.getData("SELECT t1.idcharola,UPPER(t4.pasillo),UPPER(t3.nivel),UPPER(t2.anaquel),UPPER(t1.charola),if(t1.status=1,UPPER('Activo'),UPPER('No Activo')),t4.idpasillo,t3.idnivel,t2.idanaquel FROM ccharolas AS t1 INNER JOIN canaqueles AS t2 ON t1.anaquelfkcanaqueles=t2.idanaquel INNER JOIN cniveles as t3 ON t2.nivelfkcniveles=t3.idnivel INNER JOIN cpasillos as t4 ON t3.pasillofkcpasillos=t4.idpasillo ORDER BY pasillo,nivel,anaquel,charola ASC");
+            for (int i=0;i<dt.Rows.Count;i++)
             {
-                tbubicaciones.Rows.Add(dr.GetString("id"), dr.GetString("p"), dr.GetString("a"), dr.GetString("c"), v.getStatusString(dr.GetInt32("status")),dr.GetString("idpasillo"), dr.GetString("idanaquel"));
+                tbubicaciones.Rows.Add(dt.Rows[i].ItemArray);
             }
             tbubicaciones.ClearSelection();
         }
-
-       
-
         private void tbubicaciones_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (tbubicaciones.Columns[e.ColumnIndex].Name == "Estatus")
             {
-                if (Convert.ToString(e.Value) == "Activo")
+                if (Convert.ToString(e.Value) == "Activo".ToUpper())
                 {
 
                     e.CellStyle.BackColor = Color.PaleGreen;
@@ -274,8 +283,6 @@ namespace controlFallos
             {
                 if (!string.IsNullOrWhiteSpace(idCharolaAnterior))
                 {
-
-
                     try
                     {
                         string msg;
@@ -292,61 +299,158 @@ namespace controlFallos
 
                             status = 0;
                         }
-                        if (MessageBox.Show("¿Está Seguro que Desea " + msg + "activar La Ubicacion?\n", "Control de  Fallos", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (MessageBox.Show("¿Está Seguro que Desea " + msg + "activar La Ubicacion?\n", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             c.insertar("UPDATE ccharolas SET status = '" + status + "' WHERE idcharola=" + this.idCharolaAnterior);
+                            var res2 = c.insertar("INSERT INTO modificaciones_sistema(form, idregistro, ultimaModificacion, usuariofkcpersonal, fechaHora, Tipo,empresa,area) VALUES('Catálogo de Refacciones - Ubicaciones','" + idCharolaAnterior + "','" + msg + "activación de Ubicacón','" + idUsuario + "',NOW(),'" + msg + "activación de Ubicación','" + empresa + "','" + area + "')");
                             limpiar();
-                            MessageBox.Show("La Ubicacion se ha " + msg + "activado Correctamente", "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("La Ubicacion se ha " + msg + "activado Correctamente", validaciones.MessageBoxTitle.Información.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Control de Fallos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }else
                 {
-                    MessageBox.Show("Seleccione una Ubicacion para Desactivar","Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show("Seleccione una Ubicacion para Desactivar", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK,MessageBoxIcon.Error);
                 }
             }
         }
 
+        private void cbpasillo_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            v.combos_DrawItem(sender, e);
+        }
+
+        private void tbubicaciones_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            v.paraDataGridViews_ColumnAdded(sender, e);
+        }
+
         private void tbubicaciones_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0) {
+                int pasillo = Convert.ToInt32(cbpasillo.SelectedValue);
+                int nivel = 0; if (cbniveles.DataSource != null) nivel = Convert.ToInt32(cbniveles.SelectedValue);
+                int anaquel = 0; if (cbanaquel.DataSource != null) anaquel = Convert.ToInt32(cbanaquel.SelectedValue);
+                string charola = txtcharola.Text.Trim();
+                if (_status == 1 && (pasillo > 0 && nivel > 0 && anaquel > 0 && !string.IsNullOrWhiteSpace(charola)) && (pasilloAnterior != pasillo || nivel != nivelAnterior || anaquel != anaquelAnterior || !charola.Equals(charolaAnterior)))
+                {
+                    if (MessageBox.Show("¿Desea Guardar la Información?", validaciones.MessageBoxTitle.Confirmar.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        yaAparecioMensaje = true;
+                        button9_Click(null, e);
+                    }
+                }
+                guardarReporte(e);
+            }
+        }
+
+        private void gbubicaciones_Paint(object sender, PaintEventArgs e)
+        {
+            GroupBox box = sender as GroupBox;
+            v.DrawGroupBox(box, e.Graphics, Color.FromArgb(75, 44, 52), Color.FromArgb(75, 44, 52), this);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            catNiveles cat = new catNiveles(empresa,area,idUsuario);
+            cat.Owner = this;
+            cat.ShowDialog();
+        }
+
+        private void gbaddubicacion_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbniveles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (((ComboBox)sender).SelectedIndex > 0 && Convert.ToInt32(v.getaData("SELECT COUNT(*) FROM canaqueles where nivelfkcniveles ='" + cbniveles.SelectedValue + "'")) > 0)
+            {
+                string sql = "SELECT idanaquel,UPPER(anaquel) AS anaquel FROM canaqueles WHERE status='1' and nivelfkcniveles= '" + cbniveles.SelectedValue + "' ORDER BY anaquel ASC";
+                v.iniCombos(sql, cbanaquel, "idanaquel", "anaquel", "--SELECCIONE UN ANAQUEL");
+                cbanaquel.Enabled = true;
+            }
+            else
+            {
+
+                cbanaquel.DataSource = null;
+                cbanaquel.Enabled = false;
+            }
+        }
+
+        void guardarReporte(DataGridViewCellEventArgs e)
         {
             try
             {
-                idCharolaAnterior = (string)tbubicaciones.Rows[e.RowIndex].Cells[0].Value;
-                _status = v.getStatusInt(tbubicaciones.Rows[e.RowIndex].Cells[4].Value.ToString());
-                if (Pdesactivar) {
+                idCharolaAnterior = tbubicaciones.Rows[e.RowIndex].Cells[0].Value.ToString();
+                _status = v.getStatusInt(tbubicaciones.Rows[e.RowIndex].Cells[5].Value.ToString());
+                if (Pdesactivar)
+                {
                     if (_status == 0)
                     {
 
                         btndelcha.BackgroundImage = controlFallos.Properties.Resources.up;
-                        lbldelcha.Text = "Reactivar Charola";
+                        lbldelcha.Text = "Reactivar";
                     }
                     else
                     {
 
                         btndelcha.BackgroundImage = controlFallos.Properties.Resources.delete__4_;
-                        lbldelcha.Text = "Desactivar Charola";
-                        pdelete.Visible = true;
+                        lbldelcha.Text = "Desactivar";
+                       
                     }
+                    pdelete.Visible = true;
                 }
                 if (Peditar)
                 {
-                    cbpasillo.SelectedValue = pasilloAnterior = (string)tbubicaciones.Rows[e.RowIndex].Cells[5].Value;
-                    cbanaquel.SelectedValue = anaquelAnterior = (string)tbubicaciones.Rows[e.RowIndex].Cells[6].Value;
-                    txtcharola.Text = charolaAnterior = (string)tbubicaciones.Rows[e.RowIndex].Cells[3].Value;
+                    cbpasillo.SelectedValue = pasilloAnterior = Convert.ToInt32(tbubicaciones.Rows[e.RowIndex].Cells[6].Value);
+                    if (cbpasillo.SelectedIndex == -1)
+                    {
+                        cbpasillo.SelectedIndex = 0;
+                        if (_status == 1)
+                        {
+                            MessageBox.Show("El Pasillo Ha Sido Desactivado. Seleccione Otro.", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            cbpasillo.Focus();
+                        }
+                    }
+                    cbniveles.SelectedValue = nivelAnterior = Convert.ToInt32(tbubicaciones.Rows[e.RowIndex].Cells[7].Value);
+                    if (cbniveles.SelectedIndex == -1)
+                    {
+                        cbniveles.SelectedIndex = 0;
+                        if (_status == 1)
+                        {
+                            MessageBox.Show("El Nivel Ha Sido Desactivado. Seleccione Otro.", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            cbpasillo.Focus();
+                        }
+                    }
+
+                    cbanaquel.SelectedValue = anaquelAnterior = Convert.ToInt32(tbubicaciones.Rows[e.RowIndex].Cells[8].Value);
+                    if (cbanaquel.SelectedIndex == -1)
+                    {
+                        cbanaquel.SelectedIndex = 0;
+                        if (_status == 1)
+                        {
+                            MessageBox.Show("El Anaquel Ha Sido Desactivado. Seleccione Otro.", validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            cbanaquel.Focus();
+                        }
+                    }
+                    txtcharola.Text = charolaAnterior = (string)tbubicaciones.Rows[e.RowIndex].Cells[4].Value;
                     editar = true;
                     padd.Visible = true;
                     btnsave.BackgroundImage = Properties.Resources.pencil;
-                    lbladdcharola.Text = "Editar Charola";
+                    lblsave.Text = "Guardar";
+                    gbaddubicacion.Text = "Actualizar Ubicación";
+                    btnsave.Visible = lblsave.Visible = false;
 
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, validaciones.MessageBoxTitle.Error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

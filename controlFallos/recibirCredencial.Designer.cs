@@ -77,12 +77,12 @@
             this.lbltitle.BackColor = System.Drawing.Color.Crimson;
             this.lbltitle.Font = new System.Drawing.Font("Garamond", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbltitle.ForeColor = System.Drawing.Color.White;
-            this.lbltitle.Location = new System.Drawing.Point(111, 3);
+            this.lbltitle.Location = new System.Drawing.Point(253, 0);
             this.lbltitle.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lbltitle.Name = "lbltitle";
-            this.lbltitle.Size = new System.Drawing.Size(449, 24);
+            this.lbltitle.Size = new System.Drawing.Size(193, 24);
             this.lbltitle.TabIndex = 1;
-            this.lbltitle.Text = "Sistema de Reporte de Fallos - Credencial  Duplicada";
+            this.lbltitle.Text = "Credencial  Duplicada";
             // 
             // panel2
             // 
@@ -98,6 +98,7 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(688, 191);
             this.panel2.TabIndex = 0;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // lblguardar
             // 
@@ -114,7 +115,6 @@
             this.btnguardar.BackgroundImage = global::controlFallos.Properties.Resources.save;
             this.btnguardar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnguardar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnguardar.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnguardar.FlatAppearance.BorderSize = 0;
             this.btnguardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnguardar.Location = new System.Drawing.Point(331, 103);
@@ -122,6 +122,7 @@
             this.btnguardar.Size = new System.Drawing.Size(42, 38);
             this.btnguardar.TabIndex = 2;
             this.btnguardar.UseVisualStyleBackColor = false;
+            this.btnguardar.Click += new System.EventHandler(this.btnguardar_Click_1);
             // 
             // txtgetcredencial
             // 

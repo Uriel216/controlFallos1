@@ -14,7 +14,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>F:\</PublishUrl>
+    <PublishUrl>C:\Users\Desarrollador 7\Desktop\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -24,8 +24,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>4</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>27</ApplicationRevision>
+    <ApplicationVersion>1.1.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -39,6 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,10 +51,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>C26E966B71A627BF15B224651735B121F368E220</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>64DDA1958653C22938F3C1341BD5098944D015E3</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>controlFallos_ClaveTemporal.pfx</ManifestKeyFile>
+    <ManifestKeyFile>controlFallos_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -65,11 +66,20 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\derecho_sombra_pZF_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="itextsharp">
-      <HintPath>F:\Supervicion\Supervicion\bin\Debug\itextsharp.dll</HintPath>
+      <HintPath>..\..\..\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -105,6 +115,12 @@
     <Compile Include="catAnaqueles.Designer.cs">
       <DependentUpon>catAnaqueles.cs</DependentUpon>
     </Compile>
+    <Compile Include="catAreas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catAreas.Designer.cs">
+      <DependentUpon>catAreas.cs</DependentUpon>
+    </Compile>
     <Compile Include="catClasificaciones.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,8 +142,26 @@
     <Compile Include="catfallosGrales.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="catfallosGrales.Designer.cs">
+    <Compile Include="catfallosGrales.designer.cs">
       <DependentUpon>catfallosGrales.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catGiros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catGiros.Designer.cs">
+      <DependentUpon>catGiros.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catIVA.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catIVA.designer.cs">
+      <DependentUpon>catIVA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="catNiveles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="catNiveles.Designer.cs">
+      <DependentUpon>catNiveles.cs</DependentUpon>
     </Compile>
     <Compile Include="catPasillos.cs">
       <SubType>Form</SubType>
@@ -144,7 +178,7 @@
     <Compile Include="catProveedores.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="catProveedores.Designer.cs">
+    <Compile Include="catProveedores.designer.cs">
       <DependentUpon>catProveedores.cs</DependentUpon>
     </Compile>
     <Compile Include="catPuestos.cs">
@@ -168,13 +202,13 @@
     <Compile Include="catUnidades.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="catUnidades.Designer.cs">
+    <Compile Include="catUnidades.designer.cs">
       <DependentUpon>catUnidades.cs</DependentUpon>
     </Compile>
     <Compile Include="catUnidaesTRI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="catUnidaesTRI.Designer.cs">
+    <Compile Include="catUnidaesTRI.designer.cs">
       <DependentUpon>catUnidaesTRI.cs</DependentUpon>
     </Compile>
     <Compile Include="conexion.cs" />
@@ -184,17 +218,53 @@
     <Compile Include="familias.Designer.cs">
       <DependentUpon>familias.cs</DependentUpon>
     </Compile>
-    <Compile Include="nuevoReporteMantenimiento.cs">
+    <Compile Include="FormBuscaFallasMantenimiento.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="nuevoReporteMantenimiento.Designer.cs">
-      <DependentUpon>nuevoReporteMantenimiento.cs</DependentUpon>
+    <Compile Include="FormBuscaFallasMantenimiento.designer.cs">
+      <DependentUpon>FormBuscaFallasMantenimiento.cs</DependentUpon>
     </Compile>
-    <Compile Include="nuevoReporteSupervision.cs">
+    <Compile Include="FormContraFinal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="nuevoReporteSupervision.designer.cs">
-      <DependentUpon>nuevoReporteSupervision.cs</DependentUpon>
+    <Compile Include="FormContraFinal.designer.cs">
+      <DependentUpon>FormContraFinal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormFallasMantenimiento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormFallasMantenimiento.designer.cs">
+      <DependentUpon>FormFallasMantenimiento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="leerHost.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="leerHost.Designer.cs">
+      <DependentUpon>leerHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="modificaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="modificaciones.Designer.cs">
+      <DependentUpon>modificaciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="moreinfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="moreinfo.Designer.cs">
+      <DependentUpon>moreinfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="mostrarFolio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="mostrarFolio.Designer.cs">
+      <DependentUpon>mostrarFolio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificacionAlmacen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NotificacionAlmacen.Designer.cs">
+      <DependentUpon>NotificacionAlmacen.cs</DependentUpon>
     </Compile>
     <Compile Include="marcas.cs">
       <SubType>Form</SubType>
@@ -226,11 +296,36 @@
     <Compile Include="NotificacionTri.Designer.cs">
       <DependentUpon>NotificacionTri.cs</DependentUpon>
     </Compile>
+    <Compile Include="OrdenDeCompra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OrdenDeCompra.designer.cs">
+      <DependentUpon>OrdenDeCompra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="paraSeen.cs" />
     <Compile Include="Privilegios.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Privilegios.Designer.cs">
       <DependentUpon>Privilegios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="privilegiosAlmacen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="privilegiosAlmacen.Designer.cs">
+      <DependentUpon>privilegiosAlmacen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="privilegiosMantenimiento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="privilegiosMantenimiento.Designer.cs">
+      <DependentUpon>privilegiosMantenimiento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="privilegiosSupervision.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="privilegiosSupervision.Designer.cs">
+      <DependentUpon>privilegiosSupervision.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -239,6 +334,12 @@
     </Compile>
     <Compile Include="recibirCredencial.Designer.cs">
       <DependentUpon>recibirCredencial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Supervisión.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Supervisión.designer.cs">
+      <DependentUpon>Supervisión.cs</DependentUpon>
     </Compile>
     <Compile Include="TRI.cs">
       <SubType>Form</SubType>
@@ -262,6 +363,9 @@
     <EmbeddedResource Include="catAnaqueles.resx">
       <DependentUpon>catAnaqueles.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="catAreas.resx">
+      <DependentUpon>catAreas.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="catClasificaciones.resx">
       <DependentUpon>catClasificaciones.cs</DependentUpon>
     </EmbeddedResource>
@@ -273,6 +377,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="catfallosGrales.resx">
       <DependentUpon>catfallosGrales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catGiros.resx">
+      <DependentUpon>catGiros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catIVA.resx">
+      <DependentUpon>catIVA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="catNiveles.resx">
+      <DependentUpon>catNiveles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="catPasillos.resx">
       <DependentUpon>catPasillos.cs</DependentUpon>
@@ -301,11 +414,29 @@
     <EmbeddedResource Include="familias.resx">
       <DependentUpon>familias.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="nuevoReporteMantenimiento.resx">
-      <DependentUpon>nuevoReporteMantenimiento.cs</DependentUpon>
+    <EmbeddedResource Include="FormBuscaFallasMantenimiento.resx">
+      <DependentUpon>FormBuscaFallasMantenimiento.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="nuevoReporteSupervision.resx">
-      <DependentUpon>nuevoReporteSupervision.cs</DependentUpon>
+    <EmbeddedResource Include="FormContraFinal.resx">
+      <DependentUpon>FormContraFinal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormFallasMantenimiento.resx">
+      <DependentUpon>FormFallasMantenimiento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="leerHost.resx">
+      <DependentUpon>leerHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="modificaciones.resx">
+      <DependentUpon>modificaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="moreinfo.resx">
+      <DependentUpon>moreinfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="mostrarFolio.resx">
+      <DependentUpon>mostrarFolio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NotificacionAlmacen.resx">
+      <DependentUpon>NotificacionAlmacen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="marcas.resx">
       <DependentUpon>marcas.cs</DependentUpon>
@@ -322,8 +453,20 @@
     <EmbeddedResource Include="NotificacionTri.resx">
       <DependentUpon>NotificacionTri.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OrdenDeCompra.resx">
+      <DependentUpon>OrdenDeCompra.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Privilegios.resx">
       <DependentUpon>Privilegios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="privilegiosAlmacen.resx">
+      <DependentUpon>privilegiosAlmacen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="privilegiosMantenimiento.resx">
+      <DependentUpon>privilegiosMantenimiento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="privilegiosSupervision.resx">
+      <DependentUpon>privilegiosSupervision.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -338,6 +481,9 @@
     <EmbeddedResource Include="recibirCredencial.resx">
       <DependentUpon>recibirCredencial.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Supervisión.resx">
+      <DependentUpon>Supervisión.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TRI.resx">
       <DependentUpon>TRI.cs</DependentUpon>
     </EmbeddedResource>
@@ -347,7 +493,6 @@
     <EmbeddedResource Include="ums.resx">
       <DependentUpon>ums.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="controlFallos_ClaveTemporal.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -633,6 +778,9 @@
     <None Include="Resources\foursquare-button.png" />
     <None Include="Resources\eraser.png" />
     <None Include="Resources\ajustes.png" />
+    <None Include="Resources\ajustes1.png" />
+    <None Include="Resources\1194985162469795488bus1_jarno_vasamaa_01.svg.med.png" />
+    <None Include="Resources\antique-building.png" />
     <Content Include="Resources\back.png" />
     <None Include="Resources\back1.png" />
     <None Include="Resources\box.png" />
@@ -655,8 +803,36 @@
     <None Include="Resources\car.png" />
     <None Include="Resources\car %281%29.png" />
     <None Include="Resources\goto.png" />
+    <None Include="Resources\DocumentEdit_40924.png" />
+    <None Include="Resources\document-edit_icon-icons.com_52428.png" />
+    <None Include="Resources\file.png" />
+    <None Include="Resources\comprobar.png" />
+    <None Include="Resources\deshacer.png" />
+    <None Include="Resources\FRONTAL SOMBRA.png" />
+    <None Include="Resources\DERECHO SOMBRA.png" />
+    <None Include="Resources\FRONTAL SOMBRA %281%29.png" />
+    <Content Include="Resources\conexion.txt" />
+    <None Include="Resources\derecho_sombra_pZF_icon.ico" />
+    <None Include="Resources\DERECHO SOMBRA1.png" />
+    <None Include="Resources\DERECHO SOMBRA %281%29.png" />
+    <None Include="Resources\FRONTAL SOMBRA %281%291.png" />
+    <None Include="Resources\goma-de-borrar.png" />
+    <None Include="Resources\loader.gif" />
+    <None Include="Resources\icons8-tornillo-480.png" />
+    <None Include="Resources\image.png" />
+    <None Include="Resources\edit.png" />
+    <None Include="Resources\cross.png" />
     <Content Include="Resources\mas.png" />
     <None Include="Resources\mas1.png" />
+    <None Include="Resources\notification1.png" />
+    <None Include="Resources\notification %282%29.png" />
+    <None Include="Resources\notification %283%291.png" />
+    <None Include="Resources\notification %284%29.png" />
+    <None Include="Resources\search.png" />
+    <None Include="Resources\refresh-arrows-symbol-of-interface.png" />
+    <None Include="Resources\minimazar.png" />
+    <None Include="Resources\refresh-page-option.png" />
+    <None Include="Resources\settings1.png" />
     <Content Include="Resources\sobresalir1.png" />
     <None Include="Resources\square.png" />
     <None Include="Resources\sort-by-attributes.png" />

@@ -58,6 +58,7 @@ namespace controlFallos
             {
                 existeUsuario = false;
             }
+            dr.Close();
             c.dbcon.Close();
         }
 
@@ -69,13 +70,11 @@ namespace controlFallos
                 {
                     c.insertar("INSERT INTO bloqueologin(usuario, fechaHora, ipclient, statusbloqueo, tipobloqueo) VALUES('" + usuario + "',NOW(),'" + GetIPAddress() + "','1','0')");
                     tipoBloqueo = false;
-                    c.dbcon.Close();
                 }
                 else
                 {
                     c.insertar("INSERT INTO bloqueologin(usuario, fechaHora, ipclient, statusbloqueo, tipobloqueo) VALUES('" + usuario + "',NOW(),'" + GetIPAddress() + "','1','1')");
                     tipoBloqueo = true;
-                    c.dbcon.Close();
                 }
             }
             catch (Exception ex)
@@ -88,19 +87,17 @@ namespace controlFallos
         {
             try
             {
-                string bloqueado = "SELECT COUNT(idloginstatus) as cuenta FROM bloqueologin WHERE tipobloqueo = 0 and statusbloqueo = 1";
+                string bloqueado = "SELECT COUNT(idloginstatus) as cuenta FROM bloqueologin WHERE tipobloqueo = 0 and statusbloqueo = 1 and usuario='"+usuario+"'";
                 MySqlCommand cm = new MySqlCommand(bloqueado, c.dbconection());
-                MySqlDataReader dr = cm.ExecuteReader();
-                dr.Read();
-           
-                if (dr.GetInt32("cuenta") > 0)
+                int cuenta = Convert.ToInt32(cm.ExecuteScalar());
+                c.dbcon.Close();
+                if ( cuenta> 0)
                 {
-                    c.dbcon.Close();
                     return true;
                 }
                 else
                 {
-                    c.dbcon.Close();
+
                     return false;
                 }
               
@@ -111,6 +108,14 @@ namespace controlFallos
                 MessageBox.Show(ex.Message,"Control de Fallos",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return false;
             }
+        }
+        public bool noHainiciadoSesion(string usuario)
+        {
+            string sql = "SELECT statusiniciosesion FROM datosistema WHERE usuario= '" + usuario + "'";
+            MySqlCommand m = new MySqlCommand(sql,c.dbconection());
+            bool res = Convert.ToInt32(m.ExecuteScalar()) > 0;
+            c.dbconection().Close();
+            return res;   
         }
     }
 }

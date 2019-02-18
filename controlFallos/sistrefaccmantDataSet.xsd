@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="sistrefaccmantDataSet" targetNamespace="http://tempuri.org/sistrefaccmantDataSet.xsd" xmlns:mstns="http://tempuri.org/sistrefaccmantDataSet.xsd" xmlns="http://tempuri.org/sistrefaccmantDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="sistrefaccmantConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="sistrefaccmantConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.controlFallos.Properties.Settings.GlobalReference.Default.sistrefaccmantConnectionString" Provider="MySql.Data.MySqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="cladasTableAdapter" GeneratorDataComponentClassName="cladasTableAdapter" Name="cladas" UserDataComponentName="cladasTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="sistrefaccmantConnectionString (Settings)" DbObjectName="sistrefaccmant.cladas" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="true" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT `id`, `name`, `phonecode` FROM `cladas`</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings />
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="sistrefaccmantDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="sistrefaccmantDataSet" msprop:Generator_UserDSName="sistrefaccmantDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="cladas" msprop:Generator_TableClassName="cladasDataTable" msprop:Generator_TableVarName="tablecladas" msprop:Generator_TablePropName="cladas" msprop:Generator_RowDeletingName="cladasRowDeleting" msprop:Generator_RowChangingName="cladasRowChanging" msprop:Generator_RowEvHandlerName="cladasRowChangeEventHandler" msprop:Generator_RowDeletedName="cladasRowDeleted" msprop:Generator_UserTableName="cladas" msprop:Generator_RowChangedName="cladasRowChanged" msprop:Generator_RowEvArgName="cladasRowChangeEvent" msprop:Generator_RowClassName="cladasRow">
+          <xs:complexType>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

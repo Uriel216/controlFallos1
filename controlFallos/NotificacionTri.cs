@@ -3,6 +3,7 @@ using System.Data;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Drawing;
+using System.Threading;
 
 namespace controlFallos
 {
@@ -10,47 +11,54 @@ namespace controlFallos
     {
         conexion c = new conexion();
         int tipoFalla;
+        ThreadStart tS;
+        string SQL;
+        Thread t;
+        String sql;
+        bool res = true;
+        validaciones v = new validaciones();
         public NotificacionTri(int tipoFalla)
         {
             InitializeComponent();
             this.tipoFalla = tipoFalla;
-            busqnotificaciones(consulta(tipoFalla));
-            timer1.Start();
+            consulta();
+   
 
         }
-        public String consulta(int tipoFalla) {
-            string sql = "";
+        public void consulta() {
+   
             switch (tipoFalla)
             {
                 case 1:
-                    sql = "SELECT t3.Folio, t4.ECO, t1.Estatus, concat(t2.nombres,' ', t2.ApPaterno) as 'Nombre de Mecánico', t3.TipoFallo as 'Tipo de Fallo', t3.FechaReporte as 'Fecha de Elaboración', t3.HoraEntrada as 'Hora de Entrada' , t1.HoraTerminoM as 'Hora de Término de Mnatenimiento' FROM reportemantenimiento as t1 INNER JOIN cpersonal as t2 ON t1.mecanicofkPersonal = t2.idpersona INNER JOIN reportesupervicion as t3 ON t1.FoliofkSupervicion = t3.idReporteSupervicion INNER JOIN cunidades as t4 ON t3.UnidadfkCUnidades= t4.idunidad WHERE t1.seen = 0 and (t1.Estatus='Liberada' or t1.Estatus='Reprogramada' )";
+                    sql = "SET lc_Time_names ='es_ES';SELECT t3.Folio as 'FOLIO',concat(t5.identificador,LPAD(t4.consecutivo,4,'0')) as 'ECONÓMICO', t1.Estatus AS 'ESTATUS', UPPER(concat(t2.nombres,' ', t2.ApPaterno)) as 'NOMBRE DE MECÁNICO', t3.TipoFallo as 'TIPO DE FALLO', DATE_FORMAT(t3.FechaReporte,'%W, %d de %M del %Y') as 'FECHA DEL REPORTE', t3.HoraEntrada as 'HORA DE ENTRADA' , t1.HoraTerminoM as 'HORA DE TÉRMINO DE MANTENIMIENTO' FROM reportemantenimiento as t1 INNER JOIN cpersonal as t2 ON t1.mecanicofkPersonal = t2.idpersona INNER JOIN reportesupervicion as t3 ON t1.FoliofkSupervicion = t3.idReporteSupervicion INNER JOIN cunidades as t4 ON t3.UnidadfkCUnidades= t4.idunidad INNER JOIN careas as t5 ON t4.areafkcareas=t5.idarea WHERE t1.seen = 0 and (t1.Estatus='Liberada' or t1.Estatus='Reprogramada') AND t3.fechaReporte BETWEEN DATE_SUB(curdate(), INTERVAL 1 DAY) AND curdate();";
+                    SQL = "SELECT COUNT(*) FROM reportemantenimiento as t1 INNER JOIN cpersonal as t2 ON t1.mecanicofkPersonal = t2.idpersona INNER JOIN reportesupervicion as t3 ON t1.FoliofkSupervicion = t3.idReporteSupervicion INNER JOIN cunidades as t4 ON t3.UnidadfkCUnidades= t4.idunidad INNER JOIN careas as t5 ON t4.areafkcareas=t5.idarea WHERE t1.seen = 0 and (t1.Estatus='Liberada' or t1.Estatus='Reprogramada' ) AND t3.fechaReporte BETWEEN DATE_SUB(curdate(), INTERVAL 1 DAY) AND curdate();" ;
                     break;
                 case 2:
-                    sql = "SELECT T1.Folio,t2.ECO,T1.TipoFallo as 'Tipo de Fallo', CONCAT(t1.FechaReporte, ' ',t1.HoraEntrada) as 'Entrada' ,CONCAT(t3.nombres, ' ', t3.ApPaterno) as 'Supervisor que Elaboró', IF(t1.DescFalloNoCod ='' ,(select CONCAT(tab2.falloesp,tab1.DescFalloNoCod) FROM reportesupervicion as tab1 INNER JOIN cfallosesp as tab2 ON tab1.CodFallofkcfallosesp = tab2.idfalloEsp WHERE tab1.idReporteSupervicion = t1.idReporteSupervicion), (SELECT DescFalloNoCod FROM reportesupervicion WHERE idReporteSupervicion=t1.idReporteSupervicion)) as 'Fallo Detectado', t1.ObservacionesSupervision as 'Observaciones del Supervisor' FROM reportesupervicion AS t1 INNER JOIN cunidades as t2 ON t1.UnidadfkCUnidades = t2.idunidad INNER JOIN cpersonal as t3 ON t1.SupervisorFKCPersonal = t3.idpersona WHERE t1.seen =0";
+                    sql = "SET lc_Time_names ='es_ES';SELECT T1.Folio as 'FOLIO',concat(t4.identificador,LPAD(t2.consecutivo,4,'0')) as 'ECONÓMICO',T1.TipoFallo as 'TIPO DE FALLO', UPPER(DATE_FORMAT(CONCAT(t1.FechaReporte, ' ',t1.HoraEntrada),'%W, %d de %M del %Y / %H:%i:%s'))  as 'ENTRADA' ,upper(CONCAT(t3.nombres, ' ', t3.ApPaterno)) as 'SUPERVISOR QUE ELABORÓ', IF(t1.DescFalloNoCod ='' ,(select UPPER(CONCAT(tab2.falloesp,tab1.DescFalloNoCod)) FROM reportesupervicion as tab1 INNER JOIN cfallosesp as tab2 ON tab1.CodFallofkcfallosesp = tab2.idfalloEsp WHERE tab1.idReporteSupervicion = t1.idReporteSupervicion), (SELECT UPPER(DescFalloNoCod) FROM reportesupervicion WHERE idReporteSupervicion=t1.idReporteSupervicion)) as 'FALLO DETECTADO', UPPER(t1.ObservacionesSupervision) as 'OBSERVACIONES DE SUPERVISOR' FROM reportesupervicion AS t1 INNER JOIN cunidades as t2 ON t1.UnidadfkCUnidades = t2.idunidad INNER JOIN cpersonal as t3 ON t1.SupervisorFKCPersonal = t3.idpersona INNER JOIN careas as t4 ON t2.areafkcareas=t4.idarea WHERE t1.seen =0 AND t1.fechaReporte BETWEEN DATE_SUB(curdate(), INTERVAL 1 DAY) AND curdate();";
+                    SQL= "SELECT COUNT(*) FROM reportesupervicion AS t1 INNER JOIN cunidades as t2 ON t1.UnidadfkCUnidades = t2.idunidad INNER JOIN cpersonal as t3 ON t1.SupervisorFKCPersonal = t3.idpersona INNER JOIN careas as t4 ON t2.areafkcareas=t4.idarea WHERE t1.seen =0 AND t1.fechaReporte BETWEEN DATE_SUB(curdate(), INTERVAL 1 DAY) AND curdate();";
                     break;
-                case 3:
-                    sql = "SELECT t2.Folio,t3.ECO, CONCAT(T4.nombres,' ',T4.ApPaterno) as 'Mecanico que Solicita',t1.FechaReporteM as 'Fecha de Solicitud de Refaccion'  FROM reportemantenimiento as t1 INNER JOIN reportesupervicion as t2 ON t1.FoliofkSupervicion= t2.idReporteSupervicion INNER JOIN cunidades as t3 ON t2.UnidadfkCUnidades = t3.idunidad INNER JOIN cpersonal AS t4 ON t1.MecanicofkPersonal = t4.idPersona  WHERE StatusRefacciones = 'Se Requieren Refacciones' and t1.seenAlmacen=0";
-                    break;
+             
             }
-            return sql;
-
+      
         }
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            menuPrincipal m = (menuPrincipal)this.Owner;
-            string idfolio = tbnotif.Rows[e.RowIndex].Cells[0].Value.ToString();
-            m.TraerVariable(idfolio);
-            this.Close();
-
+            if (e.RowIndex>-1) {
+                menuPrincipal m = (menuPrincipal)this.Owner;
+                string idfolio = tbnotif.Rows[e.RowIndex].Cells[0].Value.ToString();
+                m.TraerVariable(idfolio);
+                this.Close();
+            }
         }
-        public void busqnotificaciones(string sql)
+        public void busqnotificaciones()
         {
                 tbnotif.ClearSelection();
-            DataSet ds = new DataSet();
+            DataTable ds = new DataTable();
             MySqlDataAdapter cargar = new MySqlDataAdapter(sql, c.dbconection());
             cargar.Fill(ds);
-            tbnotif.DataSource = ds.Tables[0];
+            tbnotif.DataSource = ds;
             tbnotif.ClearSelection();
+            c.dbconection().Close();
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -62,48 +70,59 @@ namespace controlFallos
         }
         private void tbnotif_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (tbnotif.Columns[e.ColumnIndex].Name == "Tipo de Fallo")
+            if (tbnotif.Columns[e.ColumnIndex].Name == "TIPO DE FALLO")
             {
-                if (Convert.ToString(e.Value) == "Preventivo")
+                if (Convert.ToString(e.Value) == "PREVENTIVO")
                 {
-
                     e.CellStyle.BackColor = Color.PaleGreen;
                 }
                 else
                 {
-                    if (Convert.ToString(e.Value) == "Correctivo")
+                    if (Convert.ToString(e.Value) == "CORRECTIVO")
                     {
-
                         e.CellStyle.BackColor = Color.Khaki;
                     }
                     else
                     {
-                        if (Convert.ToString(e.Value) == "Reiterativo")
+                        if (Convert.ToString(e.Value) == "REITERATIVO")
                         {
-
                             e.CellStyle.BackColor = Color.LightCoral;
-
+                        }
+                        else
+                        {
+                            if (Convert.ToString(e.Value) == "REPROGRAMADO")
+                            {
+                                e.CellStyle.BackColor = Color.LightBlue;
+                            }
+                            else
+                            {
+                                if (Convert.ToString(e.Value) == "SEGUIMIENTO")
+                                {
+                                    e.CellStyle.BackColor = Color.FromArgb(246, 144, 123);
+                                }
+                            }
                         }
                     }
                 }
             }
-            if (this.tbnotif.Columns[e.ColumnIndex].Name == "Estatus")
+        
+                if (this.tbnotif.Columns[e.ColumnIndex].Name == "Estatus".ToUpper())
             {
-                if (Convert.ToString(e.Value) == "En Proceso")
+                if (Convert.ToString(e.Value) == "En Proceso".ToUpper())
                 {
 
                     e.CellStyle.BackColor = Color.Khaki;
                 }
                 else
                 {
-                    if (Convert.ToString(e.Value) == "Liberada")
+                    if (Convert.ToString(e.Value) == "LIBERADA".ToUpper())
                     {
 
                         e.CellStyle.BackColor = Color.PaleGreen;
                     }
                     else
                     {
-                        if (Convert.ToString(e.Value) == "Reprogramada")
+                        if (Convert.ToString(e.Value) == "REPROGRAMADA".ToUpper())
                         {
 
                             e.CellStyle.BackColor = Color.LightCoral;
@@ -112,10 +131,61 @@ namespace controlFallos
                 }
             }
         }
-        private void timer1_Tick(object sender, EventArgs e)
+
+        private void NotificacionTri_Load(object sender, EventArgs e)
         {
-            busqnotificaciones(consulta(this.tipoFalla));
+            tS = new ThreadStart(notif);
+            t = new Thread(tS);
+            t.Start();
+        }
+        delegate void internotif();
+        void notif()
+        {
+            while (res) {
+                muestra();
+                Thread.Sleep(500);
+            }
+        }
+        void muestra()
+        {
+            if (InvokeRequired)
+            {
+                internotif t = new internotif(muestra );
+                Invoke(t);
+
+            }
+            else
+            {
+                string[] arreglo = c.conex().Split(';');
+                string server = v.Desencriptar(arreglo[0]);
+                string user = v.Desencriptar(arreglo[1]);
+                string password = v.Desencriptar(arreglo[2]);
+                string database = v.Desencriptar(arreglo[3]);
+                MySqlConnection dbcon = new MySqlConnection("Server = " + server + "; user=" + user + "; password = " + password + "; database = " + database + ";");
+                dbcon.Open();
+                MySqlCommand cm = new MySqlCommand(SQL,dbcon);
+                var res = cm.ExecuteScalar();
+                dbcon.Close();
+                if (Convert.ToInt32(res) != tbnotif.Rows.Count)
+                {
+                    busqnotificaciones();
+
+                }
+            }
+     
+        }
+
+        private void NotificacionTri_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            res = false;
+            t.Abort();
+        }
+
+        private void tbnotif_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            v.paraDataGridViews_ColumnAdded(sender,e);
         }
     }
-
+   
     }
